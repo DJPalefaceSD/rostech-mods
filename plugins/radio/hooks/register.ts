@@ -5,16 +5,17 @@ import type { EngineInterface, Register } from 'claude-code'
 const isOff = atom({ plugin: 'radio', key: 'isOff' } as const, false)
 const startedAt = atom({ plugin: 'radio', key: 'startedAt' } as const, 0)
 const LONG_MS = 20_000
-const CLIP = 'sounds/done.wav'
+const DONE = 'sounds/done.wav'
+const WHISTLE = 'sounds/whistle.wav'
 
 // Claude Code's own player skips a Windows terminal, so Windows plays the file
 // with its built-in SoundPlayer; everywhere else the engine plays it.
-async function chime($: EngineInterface) {
-  const file = `${$.plugin.root}/${CLIP}`.split('/').join(String.fromCharCode(92))
+async function play($: EngineInterface, clip: string) {
+  const file = `${$.plugin.root}/${clip}`.split('/').join(String.fromCharCode(92))
   const win = await $.process
     .run(['powershell.exe', '-NoProfile', '-Command', `(New-Object Media.SoundPlayer '${file}').PlaySync()`])
     .catch(() => null)
-  if (!win || win.exitCode !== 0) await $.audio.play({ asset: CLIP }).catch(() => undefined)
+  if (!win || win.exitCode !== 0) await $.audio.play({ asset: clip }).catch(() => undefined)
 }
 
 export const register: Register = on => {
@@ -32,7 +33,7 @@ export const register: Register = on => {
   on('turn.complete', async ($, e, next) => {
     const began = await read($, startedAt)
     const took = (await $.clock.now()) - began
-    if (began && took >= LONG_MS && !(await read($, isOff))) void chime($)
+    if (began && took >= LONG_MS && !(await read($, isOff))) void play($, DONE)
     return next(e)
   })
 
@@ -43,8 +44,9 @@ export const register: Register = on => {
       return { text: arg === 'off' ? 'Radio off.' : 'Radio on. A chime plays when a turn longer than 20 seconds finishes.' }
     }
     if (arg === 'test') {
-      void chime($)
-      return { text: 'Playing the chime.' }
+      // The done chime, then the whistle, one after the other.
+      void play($, DONE).then(() => play($, WHISTLE))
+      return { text: 'Playing the done chime, then the whistle.' }
     }
     return { text: (await read($, isOff)) ? 'Radio is off. /radio on turns it on.' : 'Radio is on. A chime plays when a turn longer than 20 seconds finishes.' }
   })

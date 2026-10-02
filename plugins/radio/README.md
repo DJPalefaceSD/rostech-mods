@@ -6,7 +6,7 @@ and come back when it is done.
 The chime plays only when a turn took longer than 20 seconds, so quick
 answers stay quiet.
 
-- `/radio test` plays the chime.
+- `/radio test` plays the done chime, then the whistle.
 - `/radio off` and `/radio on` switch it.
 - `/radio` says whether it is on.
 
