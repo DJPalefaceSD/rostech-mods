@@ -7,7 +7,7 @@ must not forget stays in front of you while you work.
 
 - `/note <text>` sticks a note.
 - `/note` shows the note you have.
-- `/note done`, or the Done button, clears it.
+- `/note done`, or the Done button, clears it. Your next message then carries one visible line saying which note you cleared and when, so Claude knows you are back.
 
 The note is kept across sessions on your own machine, in Claude Code's plugin
 store, until you clear it. It sends nothing anywhere. The band draws in the

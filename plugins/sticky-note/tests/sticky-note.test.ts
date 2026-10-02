@@ -17,3 +17,16 @@ test('/note done clears it', async ($, on) => {
   const back = await $.command.run({ command: 'note', args: '' })
   expect(back.text).toContain('No note')
 })
+
+test('the next prompt says the note was cleared, once', async ($, on) => {
+  mock.store(on)
+  const seen: string[] = []
+  on('prompt.submit', (_, e) => { seen.push(e.text); return { text: e.text } as never })
+  await $.command.run({ command: 'note', args: 'call the printer' })
+  await $.command.run({ command: 'note', args: 'done' })
+  await $.prompt.submit({ text: 'hi' } as never)
+  await $.prompt.submit({ text: 'again' } as never)
+  expect(seen[0]).toContain('Sticky note cleared at')
+  expect(seen[0]).toContain('"call the printer"')
+  expect(seen[1]).toBe('again')
+})

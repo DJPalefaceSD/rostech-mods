@@ -3,6 +3,13 @@ import type { Register } from 'claude-code'
 
 // The note on screen. $.store keeps it across sessions; this atom redraws the band.
 const note = atom({ plugin: 'sticky-note', key: 'note' } as const, '')
+// A note cleared since the last prompt. The next prompt carries one line saying so,
+// because pressing Done tells Claude you are back at the screen.
+const cleared = atom({ plugin: 'sticky-note', key: 'cleared' } as const, '')
+
+function stamp(): string {
+  return new Date().toLocaleTimeString([], { hour: 'numeric', minute: '2-digit' })
+}
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
@@ -15,8 +22,10 @@ export const register: Register = on => {
   on('command.run', { command: 'note' }, async ($, e) => {
     const text = e.args.trim()
     if (text.toLowerCase() === 'done') {
+      const was = await read($, note)
       await $.store.delete('note')
       await update($, note, () => '')
+      if (was) await update($, cleared, () => `📌 Sticky note cleared at ${stamp()}: "${was}"`)
       return { text: 'Note cleared.' }
     }
     if (!text) {
@@ -26,6 +35,15 @@ export const register: Register = on => {
     await $.store.set('note', text)
     await update($, note, () => text)
     return { text: `📌 ${text}` }
+  })
+
+  on('prompt.submit', async ($, e, next) => {
+    const line = await read($, cleared)
+    if (!line) return next(e)
+    await update($, cleared, () => '')
+    return next({ ...e, text: `${e.text}
+
+(${line})` })
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
@@ -46,6 +64,7 @@ export const register: Register = on => {
             onPress={async () => {
               await $.store.delete('note')
               await update($, note, () => '')
+              await update($, cleared, () => `📌 Sticky note cleared at ${stamp()}: "${now}"`)
             }}
           />
         </Box>
