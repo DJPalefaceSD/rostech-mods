@@ -1,7 +1,7 @@
 {
   "name": "gas-gauge",
   "displayName": "Gas Gauge",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills.",
   "author": {
     "name": "Rostech"
@@ -9,5 +9,10 @@
   "license": "MIT",
   "types": "./types/index.d.ts",
   "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/gas-gauge",
-  "repository": "https://github.com/DJPalefaceSD/rostech-mods"
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/gas-gauge/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
 }
