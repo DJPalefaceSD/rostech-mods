@@ -75,7 +75,7 @@ export const register: Register = on => {
       <Box flexDirection="row">
         <Box width={half} flexDirection="column">
       <Box flexDirection="row">
-        <Text bold>🏎️ SPEEDOMETER </Text>
+        <Text bold>🏎️ </Text>
         <Text bold>0 </Text>
         <Text color={colour(now)}>{low}</Text>
         <Text bold> ½ </Text>
