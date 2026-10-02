@@ -59,6 +59,11 @@
       "name": "logo",
       "source": "./plugins/logo",
       "description": "Your own logo on the dash above the prompt, drawn in coloured blocks."
+    },
+    {
+      "name": "tach",
+      "source": "./plugins/tach",
+      "description": "A tachometer above the prompt: how fast you are burning tokens, over a window you choose."
     }
   ]
 }

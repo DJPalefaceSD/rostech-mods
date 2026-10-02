@@ -25,6 +25,7 @@ guard a tool call, or add a command. Mods need Claude Code 2.1.287 or later.
 | [Shot](plugins/shot) | Hand Claude the picture on your clipboard in one command. |
 | [Pin](plugins/pin) | A short to-do list pinned above the prompt, ticked off with one click. |
 | [Logo](plugins/logo) | Your own logo on the dash above the prompt, drawn in coloured blocks. |
+| [Tach](plugins/tach) | A tachometer above the prompt: how fast you are burning tokens, over a window you choose. |
 
 Each mod lives in `plugins/<name>/`, with its own README. Ideas not built yet
 wait in `stubs/`.
