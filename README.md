@@ -12,6 +12,19 @@ guard a tool call, or add a command. Mods need Claude Code 2.1.287 or later.
 
 ## The mods
 
-Every mod here is a stub for now.
+| Mod | What it does |
+|---|---|
+| [Gas Gauge](plugins/gas-gauge) | A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills. |
+| [Speedometer](plugins/speedometer) | A speedometer above the prompt: how full the context window is, from 0 to MAX. |
+| [Sticky Note](plugins/sticky-note) | A note above the prompt that stays until you clear it. |
+| [Radio](plugins/radio) | A chime when Claude finishes a long turn, so you can look away. |
+| [Hands-Off](plugins/hands-off) | Files you mark as yours: Claude cannot edit them until you hand them back. |
+| [Odometer](plugins/odometer) | An odometer above the prompt: how long this session has run and what it has cost. |
+| [Clip](plugins/clip) | Put text on your clipboard from the prompt, cleaned of terminal clutter. |
+| [Pop](plugins/pop) | Open a link or a file in its own window, straight from the prompt. |
+| [Shot](plugins/shot) | Hand Claude the picture on your clipboard in one command. |
+| [Pin](plugins/pin) | A short to-do list pinned above the prompt, ticked off with one click. |
+| [Logo](plugins/logo) | Your own logo on the dash above the prompt, drawn in coloured blocks. |
 
-Each mod lives in `plugins/<name>/`.
+Each mod lives in `plugins/<name>/`, with its own README. Ideas not built yet
+wait in `stubs/`.
