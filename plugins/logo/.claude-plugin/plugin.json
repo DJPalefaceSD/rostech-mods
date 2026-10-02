@@ -1,17 +1,17 @@
 {
-  "name": "speedometer",
-  "displayName": "Speedometer",
-  "version": "0.1.7",
-  "description": "A speedometer above the prompt: how full the context window is, from 0 to MAX.",
+  "name": "logo",
+  "displayName": "Logo",
+  "version": "0.1.0",
+  "description": "Your own logo on the dash above the prompt, between your other bands.",
   "author": {
     "name": "Rostech"
   },
   "license": "MIT",
   "types": "./types/index.d.ts",
-  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/speedometer",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/logo",
   "repository": "https://github.com/DJPalefaceSD/rostech-mods",
   "icon": "./icon.png",
-  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/speedometer/README.md",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/logo/README.md",
   "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
   "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
   "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
