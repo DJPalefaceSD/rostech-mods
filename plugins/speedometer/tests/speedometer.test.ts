@@ -11,7 +11,7 @@ test('/speed reads the fill the engine measured', async ($, on) => {
   on('ui.toast', async () => {})
   await $.session.measure(reading(50) as never)
   const answer = await $.command.run({ command: 'speed', args: '' })
-  expect(answer.text).toContain('context  0 ███ ½ ░░░ MAX  50% full')
+  expect(answer.text).toContain('0 ███ ½ ░░░ MAX  context 50% full')
 })
 
 test('/speed warns once when the context redlines', async ($, on) => {

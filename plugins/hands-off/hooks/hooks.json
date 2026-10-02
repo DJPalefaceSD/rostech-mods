@@ -1,6 +1,4 @@
 {
   "description": "The hands-off hooks module",
-  "modules": [
-    "./register.ts"
-  ]
+  "modules": ["./register.ts"]
 }

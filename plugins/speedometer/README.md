@@ -2,7 +2,7 @@
 
 A speedometer above the prompt: how full Claude's context window is.
 
-    🏎️ SPEEDOMETER context  0 ███ ½ █░░ MAX  67% full
+    🏎️ SPEEDOMETER 0 ███ ½ █░░ MAX  context 67% full
 
 Read it like a car's dash: 0 on the left, MAX on the right. Green while there
 is room, yellow from 60%, red from 85%, with one toast when it redlines so you

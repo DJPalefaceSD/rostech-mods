@@ -1,9 +1,18 @@
 {
   "name": "odometer",
-  "version": "0.0.1",
-  "description": "How long this session has run and what it has cost, on the dash.",
+  "displayName": "Odometer",
+  "version": "0.1.0",
+  "description": "An odometer above the prompt: how long this session has run and what it has cost.",
   "author": {
     "name": "Rostech"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/odometer",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/odometer/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
 }

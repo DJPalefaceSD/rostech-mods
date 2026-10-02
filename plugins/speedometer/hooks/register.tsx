@@ -34,7 +34,7 @@ async function answer($: StateDollar, args: string) {
   }
   const now = await read($, heat)
   if (now === null) return { text: 'No reading yet. The gauge warms up after Claude answers once.' }
-  return { text: `context  ${gauge(now)}  ${now}% full` }
+  return { text: `${gauge(now)}  context ${now}% full` }
 }
 
 export const register: Register = on => {
@@ -76,13 +76,13 @@ export const register: Register = on => {
         <Box width={half} flexDirection="column">
       <Box flexDirection="row">
         <Text bold>🏎️ SPEEDOMETER </Text>
-        <Text>context  </Text>
         <Text bold>0 </Text>
         <Text color={colour(now)}>{low}</Text>
         <Text bold> ½ </Text>
         <Text color={colour(now)}>{high}</Text>
         <Text bold> MAX</Text>
-        <Text color={colour(now)} bold>  {now}% full</Text>
+        <Text>  context </Text>
+        <Text color={colour(now)} bold>{now}% full</Text>
       </Box>
         </Box>
         {below}

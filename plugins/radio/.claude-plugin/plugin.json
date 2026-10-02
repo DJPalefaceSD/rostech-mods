@@ -1,17 +1,17 @@
 {
-  "name": "speedometer",
-  "displayName": "Speedometer",
-  "version": "0.1.5",
-  "description": "A speedometer above the prompt: how full the context window is, from 0 to MAX.",
+  "name": "radio",
+  "displayName": "Radio",
+  "version": "0.1.0",
+  "description": "A chime when Claude finishes a long turn, so you can look away.",
   "author": {
     "name": "Rostech"
   },
   "license": "MIT",
   "types": "./types/index.d.ts",
-  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/speedometer",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/radio",
   "repository": "https://github.com/DJPalefaceSD/rostech-mods",
   "icon": "./icon.png",
-  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/speedometer/README.md",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/radio/README.md",
   "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
   "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
   "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"

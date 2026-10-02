@@ -1,0 +1,4 @@
+{
+  "description": "The radio hooks module",
+  "modules": ["./register.ts"]
+}

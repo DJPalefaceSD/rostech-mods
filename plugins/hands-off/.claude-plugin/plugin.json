@@ -1,9 +1,18 @@
 {
   "name": "hands-off",
-  "version": "0.0.1",
-  "description": "Files you mark as yours. Claude cannot edit them until you say so.",
+  "displayName": "Hands-Off",
+  "version": "0.1.0",
+  "description": "Files you mark as yours: Claude cannot edit them until you hand them back.",
   "author": {
     "name": "Rostech"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/hands-off",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/hands-off/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
 }

@@ -21,6 +21,11 @@
       "description": "A note above the prompt that stays until you clear it."
     },
     {
+      "name": "radio",
+      "source": "./plugins/radio",
+      "description": "A chime when Claude finishes a long turn, so you can look away."
+    },
+    {
       "name": "needs-you-chime",
       "source": "./plugins/needs-you-chime",
       "description": "Plays a sound when Claude finishes or needs an answer from you."
@@ -28,7 +33,7 @@
     {
       "name": "hands-off",
       "source": "./plugins/hands-off",
-      "description": "Files you mark as yours. Claude cannot edit them until you say so."
+      "description": "Files you mark as yours: Claude cannot edit them until you hand them back."
     },
     {
       "name": "on-camera",
@@ -53,7 +58,7 @@
     {
       "name": "odometer",
       "source": "./plugins/odometer",
-      "description": "How long this session has run and what it has cost, on the dash."
+      "description": "An odometer above the prompt: how long this session has run and what it has cost."
     },
     {
       "name": "control-panel",
