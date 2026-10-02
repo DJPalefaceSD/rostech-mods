@@ -1,7 +1,7 @@
 {
   "name": "valet-mode",
   "displayName": "Valet Mode",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything until you unlock it.",
   "author": {
     "name": "Rostech"
