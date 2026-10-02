@@ -53,7 +53,7 @@ export const register: Register = on => {
     }
     if (verb === 'release') {
       if (arg === 'all') { await save($, []); return { text: 'Everything released.' } }
-      const p = await norm($, arg)
+      const p = await norm($, arg).catch(() => '')
       // Forgiving: "notes md" or "notesmd" still finds notes.md, by letters and digits alone.
       const loose = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
       const want = loose(arg)
