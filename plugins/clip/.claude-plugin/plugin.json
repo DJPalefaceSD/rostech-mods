@@ -1,0 +1,17 @@
+{
+  "name": "clip",
+  "displayName": "Clip",
+  "version": "0.1.0",
+  "description": "Put text on your clipboard from the prompt, cleaned of terminal clutter.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/clip",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/clip/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}

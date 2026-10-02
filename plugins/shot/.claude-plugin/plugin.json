@@ -1,0 +1,17 @@
+{
+  "name": "shot",
+  "displayName": "Shot",
+  "version": "0.1.0",
+  "description": "Hand Claude the picture on your clipboard in one command.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/shot",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/shot/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}

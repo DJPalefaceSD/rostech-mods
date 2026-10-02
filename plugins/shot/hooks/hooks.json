@@ -1,0 +1,4 @@
+{
+  "description": "The shot hooks module",
+  "modules": ["./register.ts"]
+}

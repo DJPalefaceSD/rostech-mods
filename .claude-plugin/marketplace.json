@@ -34,6 +34,21 @@
       "name": "odometer",
       "source": "./plugins/odometer",
       "description": "An odometer above the prompt: how long this session has run and what it has cost."
+    },
+    {
+      "name": "clip",
+      "source": "./plugins/clip",
+      "description": "Put text on your clipboard from the prompt, cleaned of terminal clutter."
+    },
+    {
+      "name": "pop",
+      "source": "./plugins/pop",
+      "description": "Open a link or a file in its own window, straight from the prompt."
+    },
+    {
+      "name": "shot",
+      "source": "./plugins/shot",
+      "description": "Hand Claude the picture on your clipboard in one command."
     }
   ]
 }
