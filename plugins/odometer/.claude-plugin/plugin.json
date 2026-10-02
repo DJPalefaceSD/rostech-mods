@@ -1,7 +1,7 @@
 {
   "name": "odometer",
   "displayName": "Odometer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "An odometer above the prompt: how long this session has run and what it has cost.",
   "author": {
     "name": "Rostech"
