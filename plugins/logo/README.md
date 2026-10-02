@@ -8,12 +8,22 @@ such as Gas Gauge and Speedometer, so the dash carries your brand.
 - `/logo` shows which file is in use.
 - `/logo hide` and `/logo show` toggle it.
 
-The logo is drawn in coloured block characters, 12 columns by 6 rows, so it
-shows in any terminal that can show colour. Pictures are not needed. The PNG is
-shrunk once when you set it, on your own machine with Windows PowerShell, and
-the result is kept across sessions in Claude Code's plugin store. Nothing is
-sent anywhere. See-through parts of the PNG take your terminal's own colour.
+The logo is drawn in coloured block characters, two pixels to a character, so
+it shows in any terminal that can show colour. Pictures are not needed.
 
-Windows only for now, because the shrinking uses PowerShell.
+For the sharpest logo, draw a small PNG for the dash yourself, 40 pixels a side
+or smaller. A 16 by 16 PNG is a good size. A small PNG is drawn exactly as you
+drew it, one pixel to half a character, with nothing blurred.
 
-Tested with Claude Code 2.1.287.
+A bigger PNG works too. Its see-through border is trimmed, and it is shrunk to
+16 by 16 pixels. Every pixel comes out either solid colour or clear, never a
+blur of the two, but thin lines can still break up at that size.
+
+The PNG is read once when you set it, on your own machine with Windows
+PowerShell, and the result is kept across sessions in Claude Code's plugin
+store. Nothing is sent anywhere. See-through parts of the PNG take your
+terminal's own colour.
+
+Windows only for now, because reading the PNG uses PowerShell.
+
+Tested with Claude Code 2.1.288.

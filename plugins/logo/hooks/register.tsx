@@ -9,36 +9,24 @@ const isHidden = atom({ plugin: 'logo', key: 'isHidden' } as const, false)
 
 // A terminal cell is about twice as tall as it is wide. Each cell is an upper
 // half block: its foreground is the top pixel and its background the bottom one,
-// so 12 columns by 6 rows is a square of 12 by 12 pixels. That is the smallest
-// size where the LCG mark still reads: at 6 by 6 it was a smudge.
-const COLUMNS = 12
-const ROWS = 6
+// so two square pixels fit in a cell.
+//
+// 0.2.0 shrank every PNG to 12 by 12 pixels with smoothing, and his mark came
+// out pixellated: its thinnest bars fell between pixels and smeared. Now a PNG
+// of MAX pixels a side or smaller is drawn pixel for pixel, so a mark drawn by
+// hand for the dash arrives exactly as drawn. A bigger PNG is trimmed to the
+// mark and shrunk to 16 by 16, and every pixel is either the mark's colour or
+// clear, never a blend of the two.
+const MAX = 40
+const COLUMNS = 16
+const PIXEL_ROWS = 16
 const HALF_BLOCK = 0x2580
 const TERMINAL_COLOUR = 0x01000000
 
-// Shrinks the PNG named in LOGO_FILE to LOGO_W by LOGO_H pixels, centred and with
-// its own proportions kept, and prints one RRGGBBAA value per pixel, row by row.
-// The path goes in as an environment value, never on the command line.
-const SHRINK =
-  'Add-Type -AssemblyName System.Drawing; ' +
-  '$w = [int]$env:LOGO_W; $h = [int]$env:LOGO_H; ' +
-  '$src = [System.Drawing.Image]::FromFile($env:LOGO_FILE); ' +
-  '$out = New-Object System.Drawing.Bitmap $w, $h; ' +
-  '$g = [System.Drawing.Graphics]::FromImage($out); ' +
-  '$g.InterpolationMode = [System.Drawing.Drawing2D.InterpolationMode]::HighQualityBicubic; ' +
-  '$g.PixelOffsetMode = [System.Drawing.Drawing2D.PixelOffsetMode]::HighQuality; ' +
-  '$s = [Math]::Min($w / $src.Width, $h / $src.Height); ' +
-  '$dw = $src.Width * $s; $dh = $src.Height * $s; ' +
-  '$g.DrawImage($src, [single](($w - $dw) / 2), [single](($h - $dh) / 2), [single]$dw, [single]$dh); ' +
-  '$px = for ($y = 0; $y -lt $h; $y++) { for ($x = 0; $x -lt $w; $x++) { $c = $out.GetPixel($x, $y); ' +
-  "'{0:X2}{1:X2}{2:X2}{3:X2}' -f $c.R, $c.G, $c.B, $c.A } }; " +
-  "$px -join ' '"
-
-// One pixel as the Raster wants its colour. Mostly see-through ones take the
-// terminal's own; the cut is low because shrinking thins every edge.
+// One pixel as the Raster wants its colour. A pixel under half see-through takes
+// the terminal's own colour, and one over it takes its own colour in full.
 function colour(rgba: string): number {
-  const alpha = parseInt(rgba.slice(6, 8), 16)
-  return alpha < 64 ? TERMINAL_COLOUR : parseInt(rgba.slice(0, 6), 16)
+  return parseInt(rgba.slice(6, 8), 16) < 128 ? TERMINAL_COLOUR : parseInt(rgba.slice(0, 6), 16)
 }
 
 const ALPHABET = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/'
@@ -74,14 +62,17 @@ function cells(pixels: readonly string[], columns: number, rows: number): string
 
 async function shrink($: EngineInterface, file: string): Promise<LogoPicture | null> {
   const ran = await $.process
-    .run(['powershell.exe', '-NoProfile', '-Command', SHRINK], {
-      env: { LOGO_FILE: file, LOGO_W: String(COLUMNS), LOGO_H: String(ROWS * 2) },
+    .run(['powershell.exe', '-NoProfile', '-ExecutionPolicy', 'Bypass', '-File', `${$.plugin.root}/hooks/shrink.ps1`], {
+      env: { LOGO_FILE: file, LOGO_MAX: String(MAX), LOGO_W: String(COLUMNS), LOGO_H: String(PIXEL_ROWS) },
       timeoutMs: 20000,
     })
     .catch(() => null)
-  const pixels = ran && ran.exitCode === 0 ? ran.stdout.trim().split(/\s+/) : []
-  if (pixels.length !== COLUMNS * ROWS * 2 || !pixels.every(p => /^[0-9A-F]{8}$/i.test(p))) return null
-  return { file, columns: COLUMNS, rows: ROWS, cells: cells(pixels, COLUMNS, ROWS) }
+  const words = ran && ran.exitCode === 0 ? ran.stdout.trim().split(/\s+/) : []
+  const [columns, height] = [Number(words[0]), Number(words[1])]
+  const pixels = words.slice(2)
+  if (!(columns > 0 && height > 0 && height % 2 === 0) || pixels.length !== columns * height) return null
+  if (!pixels.every(p => /^[0-9A-F]{8}$/i.test(p))) return null
+  return { file, columns, rows: height / 2, cells: cells(pixels, columns, height / 2) }
 }
 
 export const register: Register = on => {
@@ -105,7 +96,7 @@ export const register: Register = on => {
       if (!made) return { text: `Could not read ${path}. Check the path, and that it is a PNG.` }
       await $.store.set('picture', made)
       await update($, picture, () => made)
-      return { text: `Logo set: ${path}` }
+      return { text: `Logo set: ${path}, ${made.columns} columns by ${made.rows} rows.` }
     }
     const now = await read($, picture)
     return { text: now ? `Logo: ${now.file}` : 'No logo yet. /logo set <path to a PNG> puts one on the dash.' }
