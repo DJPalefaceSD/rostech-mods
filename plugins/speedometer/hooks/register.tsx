@@ -1,5 +1,5 @@
 import { atom, read, update } from 'claude-code'
-import type { Register } from 'claude-code'
+import type { Register, StateDollar } from 'claude-code'
 
 // How full the context window is, 0 to 100, as the engine last measured it.
 // null until the first response reports a fill.
@@ -25,9 +25,22 @@ function gauge(pct: number): string {
   return `0 ${low} ½ ${high} MAX`
 }
 
+// /speed and /speedometer give the same answer. Only $.state is touched here.
+async function answer($: StateDollar, args: string) {
+  const arg = args.trim().toLowerCase()
+  if (arg === 'hide' || arg === 'show') {
+    await update($, isHidden, () => arg === 'hide')
+    return { text: arg === 'hide' ? 'Band hidden.' : 'Band showing.' }
+  }
+  const now = await read($, heat)
+  if (now === null) return { text: 'No reading yet. The gauge warms up after Claude answers once.' }
+  return { text: `context  ${gauge(now)}  ${now}% full` }
+}
+
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({ name: 'speed', description: 'Show how full the context window is. /speed hide or /speed show for the band.' })
+    await $.command.register({ name: 'speedometer', description: 'Same as /speed.' })
     const usage = await $.session.usage()
     await update($, heat, () => usage.context.percent ?? null)
     return next(e)
@@ -45,16 +58,8 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'speed' }, async ($, e) => {
-    const arg = e.args.trim().toLowerCase()
-    if (arg === 'hide' || arg === 'show') {
-      await update($, isHidden, () => arg === 'hide')
-      return { text: arg === 'hide' ? 'Band hidden.' : 'Band showing.' }
-    }
-    const now = await read($, heat)
-    if (now === null) return { text: 'No reading yet. The gauge warms up after Claude answers once.' }
-    return { text: `context  ${gauge(now)}  ${now}% full` }
-  })
+  on('command.run', { command: 'speed' }, async ($, e) => answer($, e.args))
+  on('command.run', { command: 'speedometer' }, async ($, e) => answer($, e.args))
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
     if (e.props.hasSurvey || (await read($, isHidden))) return next(e)

@@ -1,7 +1,7 @@
 {
   "name": "speedometer",
   "displayName": "Speedometer",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A speedometer above the prompt: how full the context window is, from 0 to MAX.",
   "author": {
     "name": "Rostech"

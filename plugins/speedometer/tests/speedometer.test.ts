@@ -28,3 +28,8 @@ test('/speed says so before the first reading', async $ => {
   const answer = await $.command.run({ command: 'speed', args: '' })
   expect(answer.text).toContain('No reading yet')
 })
+
+test('/speedometer answers the same as /speed', async $ => {
+  const answer = await $.command.run({ command: 'speedometer', args: '' })
+  expect(answer.text).toContain('No reading yet')
+})

@@ -8,7 +8,7 @@ Read it like a car's dash: 0 on the left, MAX on the right. Green while there
 is room, yellow from 60%, red from 85%, with one toast when it redlines so you
 can `/compact` before Claude does it for you.
 
-- `/speed` prints the dial.
+- `/speed` or `/speedometer` prints the dial.
 - `/speed hide` and `/speed show` toggle the band.
 
 Gas Gauge's sibling on the same dash. The band draws in the terminal and in
