@@ -1,0 +1,6 @@
+{
+  "description": "The gps hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

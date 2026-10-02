@@ -1,0 +1,9 @@
+{
+  "name": "wipers",
+  "version": "0.0.1",
+  "description": "Hides the bands above the prompt for a clear screen. Nothing is deleted; one more press brings them back.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

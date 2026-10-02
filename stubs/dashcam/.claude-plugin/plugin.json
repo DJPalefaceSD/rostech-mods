@@ -1,0 +1,9 @@
+{
+  "name": "dashcam",
+  "version": "0.0.1",
+  "description": "Records what Claude did while you were away, to play back later.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

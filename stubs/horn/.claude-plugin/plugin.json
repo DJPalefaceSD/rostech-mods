@@ -1,0 +1,9 @@
+{
+  "name": "horn",
+  "version": "0.0.1",
+  "description": "For emergencies only: a loud alarm when something has gone badly wrong. Radio is the everyday chime.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

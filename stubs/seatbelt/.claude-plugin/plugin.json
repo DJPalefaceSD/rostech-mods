@@ -1,0 +1,9 @@
+{
+  "name": "seatbelt",
+  "version": "0.0.1",
+  "description": "A backup taken automatically before anything risky. A working idea; he may pick something else.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}
