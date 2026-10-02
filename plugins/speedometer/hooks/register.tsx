@@ -7,7 +7,7 @@ const heat = atom({ plugin: 'speedometer', key: 'heat' } as const, null as numbe
 const isHidden = atom({ plugin: 'speedometer', key: 'isHidden' } as const, false)
 
 // Gas Gauge's sibling, in a car's other dial: 0 .. ½ .. MAX.
-const CELLS = 12
+const CELLS = 6
 const HOT = 85
 
 function colour(pct: number): string {
@@ -68,7 +68,12 @@ export const register: Register = on => {
 
     const { Box, Text } = $.ui.resolve(e)
     const [low, high] = halves(now)
+    // Half the band is ours; every other band above the prompt draws in the rest.
+    const half = Math.floor((e.props.bodyColumns ?? e.viewport?.columns ?? 80) / 2)
+    const below = await next(e)
     return (
+      <Box flexDirection="row">
+        <Box width={half} flexDirection="column">
       <Box flexDirection="row">
         <Text bold>🏎️ SPEEDOMETER </Text>
         <Text>context  </Text>
@@ -78,6 +83,9 @@ export const register: Register = on => {
         <Text color={colour(now)}>{high}</Text>
         <Text bold> MAX</Text>
         <Text color={colour(now)} bold>  {now}% full</Text>
+      </Box>
+        </Box>
+        {below}
       </Box>
     )
   })

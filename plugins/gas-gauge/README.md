@@ -3,12 +3,12 @@
 A fuel gauge above the prompt: how much of your Claude plan is left in each
 window, and when it refills.
 
-    ⛽ GAS 5-hour  E ██████ ½ ███░░░ F  71%  refills 3:40 PM
+    ⛽ 5-hour  E ███ ½ █░░ F  71%  @ 3:40 PM
 
 Read it like a car: E on the left, F on the right, the ½ mark in the middle.
 Green above half a tank, yellow above a fifth, red below that.
 
-A toast fires once when a tank drops past 25% left, and again past 10%.
+Each gauge takes half the band. A toast fires once when a tank drops past 25% left, and again past 10%.
 
 - `/gas` prints every tank.
 - `/gas hide` moves the numbers to the status line. `/gas show` brings the band back.

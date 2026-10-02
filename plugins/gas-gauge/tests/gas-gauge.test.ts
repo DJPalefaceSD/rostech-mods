@@ -15,8 +15,8 @@ test('/gas reads the tanks the engine measured', async ($, on) => {
   on('ui.toast', async () => {})
   await $.session.measure(reading(29, 72) as never)
   const answer = await $.command.run({ command: 'gas', args: '' })
-  expect(answer.text).toContain('5-hour  E ██████ ½ ███░░░ F  71% left')
-  expect(answer.text).toContain('week  E ███░░░ ½ ░░░░░░ F  28% left')
+  expect(answer.text).toContain('5-hour  E ███ ½ █░░ F  71% left')
+  expect(answer.text).toContain('week  E ██░ ½ ░░░ F  28% left')
 })
 
 test('/gas says so before the first reading', async $ => {

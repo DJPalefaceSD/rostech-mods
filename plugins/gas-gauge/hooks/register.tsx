@@ -10,7 +10,7 @@ const isHidden = atom({ plugin: 'gas-gauge', key: 'isHidden' } as const, false)
 
 // A warning fires once each time a tank drops past one of these, in percent left.
 const WARN_AT = [25, 10]
-const CELLS = 12
+const CELLS = 6
 
 const NAMES: Record<string, string> = { five_hour: '5-hour', seven_day: 'week', spend_limit: 'spend' }
 
@@ -52,7 +52,7 @@ function refill(t: SessionRateLimit): string {
 
 function line(t: SessionRateLimit): string {
   const r = refill(t)
-  return `${name(t)}  ${gauge(left(t))}  ${left(t)}% left${r ? ` · refills ${r}` : ''}`
+  return `${name(t)}  ${gauge(left(t))}  ${left(t)}% left${r ? ` @ ${r}` : ''}`
 }
 
 export const register: Register = on => {
@@ -100,26 +100,34 @@ export const register: Register = on => {
     if (!now.length) return next(e)
 
     const { Box, Text } = $.ui.resolve(e)
+    // Half the band is ours; every other band above the prompt draws in the rest.
+    const half = Math.floor((e.props.bodyColumns ?? e.viewport?.columns ?? 80) / 2)
+    const below = await next(e)
     return (
-      <Box flexDirection="row" flexWrap="wrap">
-        <Text bold>⛽ GAS </Text>
-        {now.map(t => {
-          const pct = left(t)
-          const r = refill(t)
-          const [low, high] = halves(pct)
-          return (
-            <Box key={t.kind} flexDirection="row" marginRight={3}>
-              <Text>{name(t)}  </Text>
-              <Text bold>E </Text>
-              <Text color={colour(pct)}>{low}</Text>
-              <Text bold> ½ </Text>
-              <Text color={colour(pct)}>{high}</Text>
-              <Text bold> F</Text>
-              <Text color={colour(pct)} bold>  {pct}% </Text>
-              {r ? <Text dimColor>refills {r}</Text> : null}
-            </Box>
-          )
-        })}
+      <Box flexDirection="row">
+        <Box width={half} flexDirection="column">
+        <Box flexDirection="row" flexWrap="wrap">
+          <Text>⛽ </Text>
+          {now.map(t => {
+            const pct = left(t)
+            const r = refill(t)
+            const [low, high] = halves(pct)
+            return (
+              <Box key={t.kind} flexDirection="row" marginRight={2}>
+                <Text>{name(t)}  </Text>
+                <Text bold>E </Text>
+                <Text color={colour(pct)}>{low}</Text>
+                <Text bold> ½ </Text>
+                <Text color={colour(pct)}>{high}</Text>
+                <Text bold> F</Text>
+                <Text color={colour(pct)} bold>  {pct}% </Text>
+                {r ? <Text dimColor>@ {r}</Text> : null}
+              </Box>
+            )
+          })}
+        </Box>
+        </Box>
+        {below}
       </Box>
     )
   })
