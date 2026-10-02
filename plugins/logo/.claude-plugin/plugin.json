@@ -1,7 +1,7 @@
 {
   "name": "logo",
   "displayName": "Logo",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Your own logo on the dash above the prompt, between your other bands.",
   "author": {
     "name": "Rostech"

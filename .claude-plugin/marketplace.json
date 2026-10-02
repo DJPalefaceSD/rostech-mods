@@ -54,6 +54,11 @@
       "name": "pin",
       "source": "./plugins/pin",
       "description": "A short to-do list pinned above the prompt, ticked off with one click."
+    },
+    {
+      "name": "logo",
+      "source": "./plugins/logo",
+      "description": "Your own logo on the dash above the prompt, drawn in coloured blocks."
     }
   ]
 }
