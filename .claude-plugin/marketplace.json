@@ -49,6 +49,11 @@
       "name": "shot",
       "source": "./plugins/shot",
       "description": "Hand Claude the picture on your clipboard in one command."
+    },
+    {
+      "name": "pin",
+      "source": "./plugins/pin",
+      "description": "A short to-do list pinned above the prompt, ticked off with one click."
     }
   ]
 }
