@@ -34,11 +34,6 @@
       "name": "odometer",
       "source": "./plugins/odometer",
       "description": "An odometer above the prompt: how long this session has run and what it has cost."
-    },
-    {
-      "name": "logo",
-      "source": "./plugins/logo",
-      "description": "Your own logo on the dash above the prompt, between your other bands."
     }
   ]
 }

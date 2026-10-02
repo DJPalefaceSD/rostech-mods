@@ -68,8 +68,8 @@ export const register: Register = on => {
 
     const { Box, Text } = $.ui.resolve(e)
     const [low, high] = halves(now)
-    // Just under half the band is ours, leaving the middle for a logo; every other band above the prompt draws in the rest.
-    const half = Math.floor((e.props.bodyColumns ?? e.viewport?.columns ?? 80) * 0.45)
+    // Half the band is ours; every other band above the prompt draws in the rest.
+    const half = Math.floor((e.props.bodyColumns ?? e.viewport?.columns ?? 80) / 2)
     const below = await next(e)
     return (
       <Box flexDirection="row">

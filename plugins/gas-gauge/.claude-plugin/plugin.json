@@ -1,7 +1,7 @@
 {
   "name": "gas-gauge",
   "displayName": "Gas Gauge",
-  "version": "0.1.5",
+  "version": "0.1.6",
   "description": "A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills.",
   "author": {
     "name": "Rostech"
