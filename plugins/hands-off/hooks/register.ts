@@ -54,9 +54,15 @@ export const register: Register = on => {
     if (verb === 'release') {
       if (arg === 'all') { await save($, []); return { text: 'Everything released.' } }
       const p = await norm($, arg)
-      if (!held.includes(p)) return { text: `${arg} was not marked.` }
-      await save($, held.filter(h => h !== p))
-      return { text: `Released: ${arg}` }
+      // Forgiving: "notes md" or "notesmd" still finds notes.md, by letters and digits alone.
+      const loose = (s: string) => s.toLowerCase().replace(/[^a-z0-9]/g, '')
+      const want = loose(arg)
+      const match = held.includes(p) ? p : held.find(h => loose(h.split('/').pop() ?? '') === want || loose(h).endsWith(want))
+      if (!match) {
+        return { text: held.length ? `${arg} is not marked. Marked now:\n${held.join('\n')}` : `${arg} is not marked. Nothing is marked.` }
+      }
+      await save($, held.filter(h => h !== match))
+      return { text: `Released: ${match}` }
     }
     const p = await norm($, e.args)
     if (!held.includes(p)) await save($, [...held, p])

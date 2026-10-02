@@ -18,3 +18,9 @@ test('a marked folder covers the files inside it', async ($, on) => {
   const held = await $.tool.call({ tool: 'Write', file_path: 'C:/proj/docs/a.md', content: 'x' })
   expect('deny' in held || held.isError === true).toBe(true)
 })
+
+test('release finds a file by its letters even when typed loosely', async ($, on) => {
+  mock.store(on)
+  await $.command.run({ command: 'hands-off', args: 'C:/proj/notes.md' })
+  expect((await $.command.run({ command: 'hands-off', args: 'release notes md' })).text).toBe('Released: c:/proj/notes.md')
+})
