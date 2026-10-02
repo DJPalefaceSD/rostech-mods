@@ -3,10 +3,10 @@ import type { Register } from 'claude-code'
 
 // How full the context window is, 0 to 100, as the engine last measured it.
 // null until the first response reports a fill.
-const heat = atom({ plugin: 'context-limit', key: 'heat' } as const, null as number | null)
-const isHidden = atom({ plugin: 'context-limit', key: 'isHidden' } as const, false)
+const heat = atom({ plugin: 'speedometer', key: 'heat' } as const, null as number | null)
+const isHidden = atom({ plugin: 'speedometer', key: 'isHidden' } as const, false)
 
-// Gas Gauge's sibling, in a car's other dial: C .. ½ .. H.
+// Gas Gauge's sibling, in a car's other dial: 0 .. ½ .. MAX.
 const CELLS = 12
 const HOT = 85
 
@@ -22,12 +22,12 @@ function halves(pct: number): [string, string] {
 
 function gauge(pct: number): string {
   const [low, high] = halves(pct)
-  return `C ${low} ½ ${high} H`
+  return `0 ${low} ½ ${high} MAX`
 }
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    await $.command.register({ name: 'limit', description: 'Show how full the context window is. /limit hide or /limit show for the band.' })
+    await $.command.register({ name: 'speed', description: 'Show how full the context window is. /speed hide or /speed show for the band.' })
     const usage = await $.session.usage()
     await update($, heat, () => usage.context.percent ?? null)
     return next(e)
@@ -38,14 +38,14 @@ export const register: Register = on => {
       const was = await read($, heat)
       const now = Math.round(e.context.percent)
       if (was !== null && was < HOT && now >= HOT) {
-        $.ui.toast(`🌡️ Running hot: context is ${now}% full. /compact soon.`)
+        $.ui.toast(`🏎️ Redlining: context is ${now}% full. /compact soon.`)
       }
       await update($, heat, () => now)
     }
     return next(e)
   })
 
-  on('command.run', { command: 'limit' }, async ($, e) => {
+  on('command.run', { command: 'speed' }, async ($, e) => {
     const arg = e.args.trim().toLowerCase()
     if (arg === 'hide' || arg === 'show') {
       await update($, isHidden, () => arg === 'hide')
@@ -65,13 +65,13 @@ export const register: Register = on => {
     const [low, high] = halves(now)
     return (
       <Box flexDirection="row">
-        <Text bold>🌡️ CONTEXT LIMIT </Text>
+        <Text bold>🏎️ SPEEDOMETER </Text>
         <Text>context  </Text>
-        <Text bold>C </Text>
+        <Text bold>0 </Text>
         <Text color={colour(now)}>{low}</Text>
         <Text bold> ½ </Text>
         <Text color={colour(now)}>{high}</Text>
-        <Text bold> H</Text>
+        <Text bold> MAX</Text>
         <Text color={colour(now)} bold>  {now}% full</Text>
       </Box>
     )

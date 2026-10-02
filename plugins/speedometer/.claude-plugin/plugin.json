@@ -1,0 +1,13 @@
+{
+  "name": "speedometer",
+  "displayName": "Speedometer",
+  "version": "0.1.0",
+  "description": "A speedometer above the prompt: how full the context window is, from 0 to MAX.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/speedometer",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods"
+}
