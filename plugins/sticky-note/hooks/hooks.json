@@ -1,6 +1,4 @@
 {
   "description": "The sticky-note hooks module",
-  "modules": [
-    "./register.ts"
-  ]
+  "modules": ["./register.tsx"]
 }

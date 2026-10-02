@@ -1,9 +1,18 @@
 {
   "name": "sticky-note",
-  "version": "0.0.1",
-  "description": "A note that sits above the prompt until you clear it.",
+  "displayName": "Sticky Note",
+  "version": "0.1.0",
+  "description": "A note above the prompt that stays until you clear it.",
   "author": {
     "name": "Rostech"
   },
-  "license": "MIT"
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/sticky-note",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/sticky-note/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
 }
