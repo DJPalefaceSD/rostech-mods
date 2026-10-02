@@ -1,4 +1,0 @@
-{
-  "description": "The temp-gauge hooks module",
-  "modules": ["./register.tsx"]
-}

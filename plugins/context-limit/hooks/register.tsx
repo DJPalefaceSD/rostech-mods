@@ -3,8 +3,8 @@ import type { Register } from 'claude-code'
 
 // How full the context window is, 0 to 100, as the engine last measured it.
 // null until the first response reports a fill.
-const heat = atom({ plugin: 'temp-gauge', key: 'heat' } as const, null as number | null)
-const isHidden = atom({ plugin: 'temp-gauge', key: 'isHidden' } as const, false)
+const heat = atom({ plugin: 'context-limit', key: 'heat' } as const, null as number | null)
+const isHidden = atom({ plugin: 'context-limit', key: 'isHidden' } as const, false)
 
 // Gas Gauge's sibling, in a car's other dial: C .. ½ .. H.
 const CELLS = 12
@@ -27,7 +27,7 @@ function gauge(pct: number): string {
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    await $.command.register({ name: 'temp', description: 'Show how full the context window is. /temp hide or /temp show for the band.' })
+    await $.command.register({ name: 'limit', description: 'Show how full the context window is. /limit hide or /limit show for the band.' })
     const usage = await $.session.usage()
     await update($, heat, () => usage.context.percent ?? null)
     return next(e)
@@ -45,7 +45,7 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'temp' }, async ($, e) => {
+  on('command.run', { command: 'limit' }, async ($, e) => {
     const arg = e.args.trim().toLowerCase()
     if (arg === 'hide' || arg === 'show') {
       await update($, isHidden, () => arg === 'hide')
@@ -65,7 +65,7 @@ export const register: Register = on => {
     const [low, high] = halves(now)
     return (
       <Box flexDirection="row">
-        <Text bold>🌡️ TEMP </Text>
+        <Text bold>🌡️ CONTEXT LIMIT </Text>
         <Text>context  </Text>
         <Text bold>C </Text>
         <Text color={colour(now)}>{low}</Text>

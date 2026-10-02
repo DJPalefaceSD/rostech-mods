@@ -1,6 +1,6 @@
 {
-  "name": "temp-gauge",
-  "displayName": "Temp Gauge",
+  "name": "context-limit",
+  "displayName": "Context Limit",
   "version": "0.1.0",
   "description": "A temperature gauge above the prompt: how full the context window is, from C to H.",
   "author": { "name": "Rostech" },

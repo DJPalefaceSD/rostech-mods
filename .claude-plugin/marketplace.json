@@ -11,9 +11,9 @@
       "description": "A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills."
     },
     {
-      "name": "temp-gauge",
-      "source": "./plugins/temp-gauge",
-      "description": "A temperature gauge above the prompt: how full the context window is, from C to H."
+      "name": "context-limit",
+      "source": "./plugins/context-limit",
+      "description": "A temperature dial above the prompt: how full the context window is, from C to H."
     },
     {
       "name": "sticky-note",
