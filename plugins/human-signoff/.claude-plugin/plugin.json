@@ -1,0 +1,9 @@
+{
+  "name": "human-signoff",
+  "version": "0.0.1",
+  "description": "Refuses a release step until a person marks it played.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

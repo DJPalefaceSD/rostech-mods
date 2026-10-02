@@ -1,0 +1,9 @@
+{
+  "name": "record",
+  "version": "0.0.1",
+  "description": "Writes every exchange to a dated file you keep.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

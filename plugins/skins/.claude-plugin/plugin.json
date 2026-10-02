@@ -1,0 +1,9 @@
+{
+  "name": "skins",
+  "version": "0.0.1",
+  "description": "Claude Code wearing a colour skin of your choice.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

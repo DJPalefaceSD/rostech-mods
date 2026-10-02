@@ -1,0 +1,6 @@
+{
+  "description": "The run-by-name hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

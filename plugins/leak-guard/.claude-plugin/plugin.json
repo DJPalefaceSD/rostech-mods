@@ -1,0 +1,9 @@
+{
+  "name": "leak-guard",
+  "version": "0.0.1",
+  "description": "Refuses a git commit that carries a value you listed as private.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

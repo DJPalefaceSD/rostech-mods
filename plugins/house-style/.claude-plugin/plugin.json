@@ -1,0 +1,9 @@
+{
+  "name": "house-style",
+  "version": "0.0.1",
+  "description": "Your reply rules, sent to Claude every turn, with one switch to turn them off.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

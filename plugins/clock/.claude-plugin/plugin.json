@@ -1,0 +1,9 @@
+{
+  "name": "clock",
+  "version": "0.0.1",
+  "description": "The real time on the dash, read at the moment you look.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

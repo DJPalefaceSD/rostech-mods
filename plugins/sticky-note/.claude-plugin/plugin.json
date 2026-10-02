@@ -1,0 +1,9 @@
+{
+  "name": "sticky-note",
+  "version": "0.0.1",
+  "description": "A note that sits above the prompt until you clear it.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

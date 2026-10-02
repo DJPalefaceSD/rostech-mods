@@ -1,0 +1,9 @@
+{
+  "name": "clip",
+  "version": "0.0.1",
+  "description": "Puts a value on your clipboard, cleaned of terminal decoration.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

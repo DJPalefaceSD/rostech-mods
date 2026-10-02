@@ -1,0 +1,9 @@
+{
+  "name": "run-by-name",
+  "version": "0.0.1",
+  "description": "Runs a repo script by its bare name.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

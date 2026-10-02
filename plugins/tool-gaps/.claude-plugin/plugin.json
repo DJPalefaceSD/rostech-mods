@@ -1,0 +1,9 @@
+{
+  "name": "tool-gaps",
+  "version": "0.0.1",
+  "description": "Finds the commands you keep typing by hand that should be tools.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

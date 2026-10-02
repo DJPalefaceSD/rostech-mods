@@ -1,0 +1,9 @@
+{
+  "name": "on-camera",
+  "version": "0.0.1",
+  "description": "Streaming mode. Hides names, paths and keys you list from tool output before they reach the screen.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

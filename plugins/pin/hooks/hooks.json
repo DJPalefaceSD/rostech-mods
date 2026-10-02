@@ -1,0 +1,6 @@
+{
+  "description": "The pin hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

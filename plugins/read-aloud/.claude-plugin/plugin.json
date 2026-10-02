@@ -1,0 +1,9 @@
+{
+  "name": "read-aloud",
+  "version": "0.0.1",
+  "description": "Reads the last answer out loud.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

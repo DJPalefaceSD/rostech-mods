@@ -1,0 +1,6 @@
+{
+  "description": "The turn-meter hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

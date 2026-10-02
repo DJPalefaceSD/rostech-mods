@@ -1,0 +1,9 @@
+{
+  "name": "memory-trim",
+  "version": "0.0.1",
+  "description": "Keeps your memory index under the length Claude reads in full.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

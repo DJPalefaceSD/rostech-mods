@@ -1,0 +1,6 @@
+{
+  "description": "The needs-you-chime hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

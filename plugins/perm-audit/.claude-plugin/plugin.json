@@ -1,0 +1,9 @@
+{
+  "name": "perm-audit",
+  "version": "0.0.1",
+  "description": "A pane of what this machine lets Claude do, read from settings.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

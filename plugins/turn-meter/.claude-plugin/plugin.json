@@ -1,0 +1,9 @@
+{
+  "name": "turn-meter",
+  "version": "0.0.1",
+  "description": "How long and how many tool calls each turn took, charted.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

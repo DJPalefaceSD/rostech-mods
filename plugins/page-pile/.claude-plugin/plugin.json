@@ -1,0 +1,9 @@
+{
+  "name": "page-pile",
+  "version": "0.0.1",
+  "description": "Keeps a dated local copy of every artifact page Claude publishes. Only ever adds.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

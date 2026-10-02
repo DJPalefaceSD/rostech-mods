@@ -1,0 +1,6 @@
+{
+  "description": "The odometer hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

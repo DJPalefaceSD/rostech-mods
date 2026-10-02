@@ -1,0 +1,9 @@
+{
+  "name": "odometer",
+  "version": "0.0.1",
+  "description": "How long this session has run and what it has cost, on the dash.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

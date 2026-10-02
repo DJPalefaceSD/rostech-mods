@@ -1,0 +1,9 @@
+{
+  "name": "needs-you-chime",
+  "version": "0.0.1",
+  "description": "Plays a sound when Claude finishes or needs an answer from you.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,6 @@
+{
+  "description": "The record hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

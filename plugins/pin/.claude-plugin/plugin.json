@@ -1,0 +1,9 @@
+{
+  "name": "pin",
+  "version": "0.0.1",
+  "description": "A pinned to-do band above the prompt.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

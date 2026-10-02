@@ -1,0 +1,9 @@
+{
+  "name": "hands-off",
+  "version": "0.0.1",
+  "description": "Files you mark as yours. Claude cannot edit them until you say so.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

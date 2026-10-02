@@ -1,0 +1,6 @@
+{
+  "description": "The perm-audit hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

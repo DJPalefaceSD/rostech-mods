@@ -1,0 +1,9 @@
+{
+  "name": "control-panel",
+  "version": "0.0.1",
+  "description": "A pane of every setting you use, with the word that changes each one.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

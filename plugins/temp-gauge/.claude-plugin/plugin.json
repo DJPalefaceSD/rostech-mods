@@ -1,0 +1,9 @@
+{
+  "name": "temp-gauge",
+  "displayName": "Temp Gauge",
+  "version": "0.1.0",
+  "description": "A temperature gauge above the prompt: how full the context window is, from C to H.",
+  "author": { "name": "Rostech" },
+  "license": "MIT",
+  "types": "./types/index.d.ts"
+}

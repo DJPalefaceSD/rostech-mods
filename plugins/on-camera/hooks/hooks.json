@@ -1,0 +1,6 @@
+{
+  "description": "The on-camera hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

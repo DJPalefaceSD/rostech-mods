@@ -1,0 +1,9 @@
+{
+  "name": "drop-folder",
+  "version": "0.0.1",
+  "description": "A band when files are waiting in a folder you name, like a phone drop.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

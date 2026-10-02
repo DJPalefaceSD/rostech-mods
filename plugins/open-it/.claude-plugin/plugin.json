@@ -1,0 +1,9 @@
+{
+  "name": "open-it",
+  "version": "0.0.1",
+  "description": "Opens a result in your browser, with markdown rendered first.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT"
+}

@@ -1,0 +1,6 @@
+{
+  "description": "The sticky-note hooks module",
+  "modules": [
+    "./register.ts"
+  ]
+}

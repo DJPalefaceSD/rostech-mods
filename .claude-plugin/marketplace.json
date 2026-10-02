@@ -1,0 +1,134 @@
+{
+  "name": "rostech",
+  "description": "Small mods for Claude Code, for working at a glance.",
+  "owner": {
+    "name": "Rostech"
+  },
+  "plugins": [
+    {
+      "name": "gas-gauge",
+      "source": "./plugins/gas-gauge",
+      "description": "A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills."
+    },
+    {
+      "name": "temp-gauge",
+      "source": "./plugins/temp-gauge",
+      "description": "A temperature gauge above the prompt: how full the context window is, from C to H."
+    },
+    {
+      "name": "sticky-note",
+      "source": "./plugins/sticky-note",
+      "description": "A note that sits above the prompt until you clear it."
+    },
+    {
+      "name": "needs-you-chime",
+      "source": "./plugins/needs-you-chime",
+      "description": "Plays a sound when Claude finishes or needs an answer from you."
+    },
+    {
+      "name": "hands-off",
+      "source": "./plugins/hands-off",
+      "description": "Files you mark as yours. Claude cannot edit them until you say so."
+    },
+    {
+      "name": "on-camera",
+      "source": "./plugins/on-camera",
+      "description": "Streaming mode. Hides names, paths and keys you list from tool output before they reach the screen."
+    },
+    {
+      "name": "tool-gaps",
+      "source": "./plugins/tool-gaps",
+      "description": "Finds the commands you keep typing by hand that should be tools."
+    },
+    {
+      "name": "house-style",
+      "source": "./plugins/house-style",
+      "description": "Your reply rules, sent to Claude every turn, with one switch to turn them off."
+    },
+    {
+      "name": "page-pile",
+      "source": "./plugins/page-pile",
+      "description": "Keeps a dated local copy of every artifact page Claude publishes. Only ever adds."
+    },
+    {
+      "name": "odometer",
+      "source": "./plugins/odometer",
+      "description": "How long this session has run and what it has cost, on the dash."
+    },
+    {
+      "name": "control-panel",
+      "source": "./plugins/control-panel",
+      "description": "A pane of every setting you use, with the word that changes each one."
+    },
+    {
+      "name": "drop-folder",
+      "source": "./plugins/drop-folder",
+      "description": "A band when files are waiting in a folder you name, like a phone drop."
+    },
+    {
+      "name": "read-aloud",
+      "source": "./plugins/read-aloud",
+      "description": "Reads the last answer out loud."
+    },
+    {
+      "name": "open-it",
+      "source": "./plugins/open-it",
+      "description": "Opens a result in your browser, with markdown rendered first."
+    },
+    {
+      "name": "clip",
+      "source": "./plugins/clip",
+      "description": "Puts a value on your clipboard, cleaned of terminal decoration."
+    },
+    {
+      "name": "record",
+      "source": "./plugins/record",
+      "description": "Writes every exchange to a dated file you keep."
+    },
+    {
+      "name": "clock",
+      "source": "./plugins/clock",
+      "description": "The real time on the dash, read at the moment you look."
+    },
+    {
+      "name": "pin",
+      "source": "./plugins/pin",
+      "description": "A pinned to-do band above the prompt."
+    },
+    {
+      "name": "turn-meter",
+      "source": "./plugins/turn-meter",
+      "description": "How long and how many tool calls each turn took, charted."
+    },
+    {
+      "name": "perm-audit",
+      "source": "./plugins/perm-audit",
+      "description": "A pane of what this machine lets Claude do, read from settings."
+    },
+    {
+      "name": "leak-guard",
+      "source": "./plugins/leak-guard",
+      "description": "Refuses a git commit that carries a value you listed as private."
+    },
+    {
+      "name": "human-signoff",
+      "source": "./plugins/human-signoff",
+      "description": "Refuses a release step until a person marks it played."
+    },
+    {
+      "name": "memory-trim",
+      "source": "./plugins/memory-trim",
+      "description": "Keeps your memory index under the length Claude reads in full."
+    },
+    {
+      "name": "run-by-name",
+      "source": "./plugins/run-by-name",
+      "description": "Runs a repo script by its bare name."
+    },
+    {
+      "name": "skins",
+      "source": "./plugins/skins",
+      "description": "Claude Code wearing a colour skin of your choice."
+    }
+  ]
+}
