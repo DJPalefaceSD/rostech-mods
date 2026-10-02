@@ -64,6 +64,11 @@
       "name": "tach",
       "source": "./plugins/tach",
       "description": "A tachometer above the prompt: how fast you are burning tokens, over a window you choose."
+    },
+    {
+      "name": "valet-mode",
+      "source": "./plugins/valet-mode",
+      "description": "A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything."
     }
   ]
 }

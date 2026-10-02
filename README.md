@@ -26,6 +26,7 @@ guard a tool call, or add a command. Mods need Claude Code 2.1.287 or later.
 | [Pin](plugins/pin) | A short to-do list pinned above the prompt, ticked off with one click. |
 | [Logo](plugins/logo) | Your own logo on the dash above the prompt, drawn in coloured blocks. |
 | [Tach](plugins/tach) | A tachometer above the prompt: how fast you are burning tokens, over a window you choose. |
+| [Valet Mode](plugins/valet-mode) | A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything. |
 
 Each mod lives in `plugins/<name>/`, with its own README. Ideas not built yet
 wait in `stubs/`.

@@ -1,0 +1,18 @@
+{
+  "name": "valet-mode",
+  "displayName": "Valet Mode",
+  "version": "0.1.0",
+  "description": "A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything until you unlock it.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/valet-mode",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/valet-mode/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}

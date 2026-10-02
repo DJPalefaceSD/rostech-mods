@@ -1,6 +1,4 @@
 {
   "description": "The valet-mode hooks module",
-  "modules": [
-    "./register.ts"
-  ]
+  "modules": ["./register.tsx"]
 }

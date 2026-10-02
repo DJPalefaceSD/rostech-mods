@@ -1,9 +1,0 @@
-{
-  "name": "valet-mode",
-  "version": "0.0.1",
-  "description": "A safe, locked-down mode for someone else at your PC.",
-  "author": {
-    "name": "Rostech"
-  },
-  "license": "MIT"
-}
