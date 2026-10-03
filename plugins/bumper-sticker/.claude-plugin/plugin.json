@@ -1,0 +1,25 @@
+{
+  "name": "bumper-sticker",
+  "displayName": "Bumper Sticker",
+  "version": "0.1.0",
+  "description": "Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/bumper-sticker",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/bumper-sticker/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md",
+  "userConfig": {
+    "words": {
+      "type": "string",
+      "title": "Your words",
+      "description": "The words the busy line shows, separated by commas. Leave it empty for the print-shop set.",
+      "default": ""
+    }
+  }
+}
