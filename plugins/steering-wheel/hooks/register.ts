@@ -4,16 +4,17 @@ import type { Register } from 'claude-code'
 // Ignition the same day, his words: "rename ignition to steering wheel because GPT uses steer".
 // Ryan, 3 Oct 2026: "i rewally dislike ctrl x + ctrl s
 // to send" · "I want it to say tap ESC to send now" · "if it doesnt work for everyoine we
-// cant use it". He picked F5, then Alt+Enter; ESC stayed the stop button.
+// cant use it". He picked F5, tried Alt+Enter, went back to F5; ESC stayed the stop button.
 //
 // A mod cannot bind keys. The key lives in each person's own ~/.claude/keybindings.json,
-// so /steering-wheel writes Alt+Enter there, merged, and LEAVES the default chord on as the fallback
-// for a terminal that keeps Alt+Enter for itself. The hint names whatever key the file says now,
+// so /steering-wheel writes F5 there, merged, and LEAVES the default chord on as the fallback
+// for a terminal that never sends F5. The hint names whatever key the file says now,
 // read off the file, never typed here.
 
 const ACTION = 'chat:sendNow'
-// 🔁 Alt+Enter, his words the same evening: "make it alt enter by default because im not sure f5 works well".
-const KEY = 'alt+enter'
+// 🔁 Alt+Enter for one version, then back: his words the same evening, "it make me go full
+// screen sometimes" and "lets put it back to F5". Windows Terminal keeps Alt+Enter for itself.
+const KEY = 'f5'
 const DEFAULT_CHORD = 'ctrl+x ctrl+s'
 
 type Block = { context: string; bindings: Record<string, string | null> }
@@ -83,7 +84,7 @@ export const register: Register = on => {
     const path = `${home}/.claude/keybindings.json`
     const text = (await $.fs.exists(path)) ? await $.fs.read(path) : null
     key = sendKey(parse(text)) ?? DEFAULT_CHORD
-    $.command.register({ name: 'steering-wheel', description: 'Set Alt+Enter to send a waiting message now' })
+    $.command.register({ name: 'steering-wheel', description: 'Set F5 to send a waiting message now' })
     return next(e)
   })
 
@@ -93,11 +94,11 @@ export const register: Register = on => {
     const before = parse((await $.fs.exists(path)) ? await $.fs.read(path) : null)
     if (sendKey(before) === KEY) {
       key = KEY
-      return { text: `Alt+Enter already sends now. Nothing changed. (${path})` }
+      return { text: `F5 already sends now. Nothing changed. (${path})` }
     }
     await $.fs.write(path, JSON.stringify(withKey(before), null, 2) + '\n')
     key = KEY
-    return { text: `Alt+Enter now sends a waiting message right away. Ctrl+X Ctrl+S still works too, for a terminal that keeps Alt+Enter for itself (Windows Terminal uses it for full screen). (${path})` }
+    return { text: `F5 now sends a waiting message right away. Ctrl+X Ctrl+S still works too, for a terminal that never sends F5. (${path})` }
   })
 
   on('ui.render', { component: 'PromptHint' }, ($, e, next) => {

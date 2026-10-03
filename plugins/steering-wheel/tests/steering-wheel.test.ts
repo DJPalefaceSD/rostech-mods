@@ -2,7 +2,7 @@ import { test, expect } from 'claude-code/testing'
 import { pretty, rewrite, sendKey, withKey } from '../hooks/register'
 
 test('the hint names the key and says tap', () => {
-  expect(rewrite('esc to interrupt · ctrl+x ctrl+s to send now', 'alt+enter')).toBe('esc to interrupt · tap Alt+Enter to send now')
+  expect(rewrite('esc to interrupt · ctrl+x ctrl+s to send now', 'f5')).toBe('esc to interrupt · tap F5 to send now')
   expect(rewrite('ctrl+enter to send now', 'f5')).toBe('tap F5 to send now')
   expect(rewrite('? for shortcuts', 'f5')).toBe('? for shortcuts')
 })
@@ -19,6 +19,6 @@ test('setting the key keeps every other binding and leaves the default on', () =
   const out = withKey({ bindings: [{ context: 'Global', bindings: { 'ctrl+t': null } }] })
   expect(out.bindings[0].bindings['ctrl+t']).toBe(null)
   const chat = out.bindings.find(b => b.context === 'Chat')!
-  expect(chat.bindings['alt+enter']).toBe('chat:sendNow')
+  expect(chat.bindings.f5).toBe('chat:sendNow')
   expect('ctrl+x ctrl+s' in chat.bindings).toBe(false)
 })
