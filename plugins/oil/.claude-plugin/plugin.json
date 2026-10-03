@@ -1,0 +1,17 @@
+{
+  "name": "oil",
+  "displayName": "Oil",
+  "version": "0.1.0",
+  "description": "An oil gauge above the prompt: this week's Fable use, beside Gas Gauge.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/oil",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/oil/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}

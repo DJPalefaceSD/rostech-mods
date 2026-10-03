@@ -1,0 +1,4 @@
+{
+  "description": "The oil hooks module",
+  "modules": ["./register.tsx"]
+}
