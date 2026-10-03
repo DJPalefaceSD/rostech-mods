@@ -19,12 +19,7 @@
     "tanks": {
       "type": "string",
       "title": "Tanks to show",
-      "description": "Which plan windows the gauge shows: both, the 5-hour window only, or the week only.",
-      "options": [
-        "both",
-        "5-hour",
-        "week"
-      ],
+      "description": "Which plan windows the gauge shows. Type both, 5-hour, or week.",
       "default": "both"
     }
   }

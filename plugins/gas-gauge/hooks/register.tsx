@@ -61,7 +61,7 @@ function line(t: SessionRateLimit): string {
 }
 
 export const register: Register = (on, options) => {
-  const leftOut = LEFT_OUT[String(options.tanks ?? 'both')]
+  const leftOut = LEFT_OUT[String(options.tanks ?? 'both').trim().toLowerCase()]
   const shown = (all: readonly SessionRateLimit[]) => all.filter(t => t.kind !== leftOut)
 
   on('session.start', async ($, e, next) => {
