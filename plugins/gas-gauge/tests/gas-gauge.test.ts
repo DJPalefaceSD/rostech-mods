@@ -39,3 +39,26 @@ test('/gas hide keeps the numbers on the status line', async $ => {
   const answer = await $.command.run({ command: 'gas', args: 'hide' })
   expect(answer.text).toContain('Band hidden')
 })
+
+test('set to week, the 5-hour tank is gone from /gas', { options: { tanks: 'week' } }, async ($, on) => {
+  on('session.measure', (_, e) => ({ changed: e.changed }))
+  on('ui.status', async () => {})
+  on('ui.toast', async () => {})
+  await $.session.measure(reading(29, 72) as never)
+  const answer = await $.command.run({ command: 'gas', args: '' })
+  expect(answer.text).toContain('week  E ██░ ½ ░░░ F  28% left')
+  expect(answer.text).not.toContain('5-hour')
+})
+
+test('set to 5-hour, the week tank is gone and never warns', { options: { tanks: '5-hour' } }, async ($, on) => {
+  const toasts: string[] = []
+  on('session.measure', (_, e) => ({ changed: e.changed }))
+  on('ui.status', async () => {})
+  on('ui.toast', async (_, e) => { toasts.push(e.text) })
+  await $.session.measure(reading(10, 70) as never)
+  await $.session.measure(reading(10, 80) as never)
+  const answer = await $.command.run({ command: 'gas', args: '' })
+  expect(answer.text).toContain('5-hour')
+  expect(answer.text).not.toContain('week')
+  expect(toasts.length).toBe(0)
+})

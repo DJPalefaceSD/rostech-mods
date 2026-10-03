@@ -1,7 +1,7 @@
 {
   "name": "gas-gauge",
   "displayName": "Gas Gauge",
-  "version": "0.1.6",
+  "version": "0.2.0",
   "description": "A fuel gauge above the prompt: how much of your Claude plan is left, and when it refills.",
   "author": {
     "name": "Rostech"
@@ -14,5 +14,18 @@
   "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/gas-gauge/README.md",
   "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
   "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
-  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md",
+  "userConfig": {
+    "tanks": {
+      "type": "string",
+      "title": "Tanks to show",
+      "description": "Which plan windows the gauge shows: both, the 5-hour window only, or the week only.",
+      "options": [
+        "both",
+        "5-hour",
+        "week"
+      ],
+      "default": "both"
+    }
+  }
 }

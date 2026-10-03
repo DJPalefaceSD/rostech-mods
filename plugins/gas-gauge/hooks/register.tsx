@@ -14,6 +14,11 @@ const CELLS = 6
 
 const NAMES: Record<string, string> = { five_hour: '5-hour', seven_day: 'week', spend_limit: 'spend' }
 
+// The tanks setting, picked in /config: both windows, or one of them alone. A
+// tank it leaves out is gone everywhere: the band, /gas, the toasts and the
+// status line. Any other window the plan has, such as spend, always shows.
+const LEFT_OUT: Record<string, string> = { '5-hour': 'seven_day', week: 'five_hour' }
+
 function left(t: SessionRateLimit): number {
   return Math.max(0, Math.round(100 - t.percentUsed))
 }
@@ -55,19 +60,23 @@ function line(t: SessionRateLimit): string {
   return `${name(t)}  ${gauge(left(t))}  ${left(t)}% left${r ? ` @ ${r}` : ''}`
 }
 
-export const register: Register = on => {
+export const register: Register = (on, options) => {
+  const leftOut = LEFT_OUT[String(options.tanks ?? 'both')]
+  const shown = (all: readonly SessionRateLimit[]) => all.filter(t => t.kind !== leftOut)
+
   on('session.start', async ($, e, next) => {
     await $.command.register({ name: 'gas', description: 'Show how much of your plan is left. /gas hide or /gas show for the band.' })
     const usage = await $.session.usage()
-    await update($, tanks, () => usage.rateLimits)
+    await update($, tanks, () => shown(usage.rateLimits))
     return next(e)
   })
 
   // Pushed by the engine after each turn and whenever a window moves a point.
   on('session.measure', async ($, e, next) => {
     if (e.changed.includes('rateLimits')) {
+      const measured = shown(e.rateLimits)
       const before = await read($, tanks)
-      for (const t of e.rateLimits) {
+      for (const t of measured) {
         const was = before.find(b => b.kind === t.kind)
         if (!was) continue
         for (const mark of WARN_AT) {
@@ -76,9 +85,9 @@ export const register: Register = on => {
           }
         }
       }
-      await update($, tanks, () => e.rateLimits)
-      const hidden = await read($, isHidden)
-      $.ui.status(hidden && e.rateLimits.length ? '⛽ ' + e.rateLimits.map(t => `${name(t)} ${left(t)}%`).join(' · ') : undefined)
+      await update($, tanks, () => measured)
+      const isBandHidden = await read($, isHidden)
+      $.ui.status(isBandHidden && measured.length ? '⛽ ' + measured.map(t => `${name(t)} ${left(t)}%`).join(' · ') : undefined)
     }
     return next(e)
   })
