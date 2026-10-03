@@ -76,9 +76,9 @@
       "description": "Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest."
     },
     {
-      "name": "ignition",
-      "source": "./plugins/ignition",
-      "description": "One key to send now. /ignition sets F5 to send a waiting message right away, and the hint under the prompt says so."
+      "name": "steering-wheel",
+      "source": "./plugins/steering-wheel",
+      "description": "Steer Claude mid-turn with one key. /steering-wheel sets F5 to send a waiting message right away, and the hint under the prompt says so."
     }
   ]
 }

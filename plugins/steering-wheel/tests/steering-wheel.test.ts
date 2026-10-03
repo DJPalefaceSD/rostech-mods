@@ -1,0 +1,24 @@
+import { test, expect } from 'claude-code/testing'
+import { pretty, rewrite, sendKey, withKey } from '../hooks/register'
+
+test('the hint names the key and says tap', () => {
+  expect(rewrite('esc to interrupt · ctrl+x ctrl+s to send now', 'alt+enter')).toBe('esc to interrupt · tap Alt+Enter to send now')
+  expect(rewrite('ctrl+enter to send now', 'f5')).toBe('tap F5 to send now')
+  expect(rewrite('? for shortcuts', 'f5')).toBe('? for shortcuts')
+})
+
+test('the key is read off the file', () => {
+  expect(sendKey(null)).toBe('ctrl+x ctrl+s')
+  expect(sendKey({ bindings: [{ context: 'Chat', bindings: { 'ctrl+x ctrl+s': null, f5: 'chat:sendNow' } }] })).toBe('f5')
+  expect(pretty('ctrl+x ctrl+s')).toBe('Ctrl+X Ctrl+S')
+  expect(pretty('alt+enter')).toBe('Alt+Enter')
+  expect(pretty('f5')).toBe('F5')
+})
+
+test('setting the key keeps every other binding and leaves the default on', () => {
+  const out = withKey({ bindings: [{ context: 'Global', bindings: { 'ctrl+t': null } }] })
+  expect(out.bindings[0].bindings['ctrl+t']).toBe(null)
+  const chat = out.bindings.find(b => b.context === 'Chat')!
+  expect(chat.bindings['alt+enter']).toBe('chat:sendNow')
+  expect('ctrl+x ctrl+s' in chat.bindings).toBe(false)
+})

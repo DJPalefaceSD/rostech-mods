@@ -1,0 +1,17 @@
+{
+  "name": "steering-wheel",
+  "displayName": "Steering Wheel",
+  "version": "0.1.0",
+  "description": "Steer Claude mid-turn with one key. /steering-wheel sets Alt+Enter to send a waiting message right away, and the hint under the prompt says so.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/steering-wheel",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/steering-wheel/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}
