@@ -1,8 +1,6 @@
 import type { Register } from 'claude-code'
 
-// 🛞 STEERING WHEEL — one chord to send now, so you can steer Claude mid-turn. Renamed from
-// Ignition on 3 Oct, his words: "rename ignition to steering wheel because GPT uses steer".
-// Ignition itself came back as Horn on 4 Oct, his words: "i want to
+// 📯 HORN — one chord to send now. Renamed from Ignition, his words, 4 Oct 2026: "i want to
 // change ignition to 'Horn' because when I bash F5 its like im honking the horn".
 //
 // Why not F5 any more: Claude Code's keybindings only take letters, digits and the named
@@ -12,7 +10,7 @@ import type { Register } from 'claude-code'
 // default chord in the Chat context, so binding it takes nothing away.
 //
 // A mod cannot bind keys. The key lives in each person's own ~/.claude/keybindings.json,
-// so /steering-wheel writes the chord there, merged. It never switches off a default. It also takes
+// so /horn writes the chord there, merged. It never switches off a default. It also takes
 // back the two lines an older version could have left behind: F5 → send now, and the
 // default Ctrl+X Ctrl+S switched off. Every other line stays as the person had it.
 // The hint names whatever key the file says now, read off the file, never typed here.
@@ -20,7 +18,7 @@ import type { Register } from 'claude-code'
 const ACTION = 'chat:sendNow'
 const KEY = 'ctrl+x ctrl+x'
 const DEFAULT_CHORD = 'ctrl+x ctrl+s'
-const NAME = 'steering-wheel'
+const NAME = 'horn'
 
 type Block = { context: string; bindings: Record<string, string | null> }
 type File = { $schema?: string; $docs?: string; bindings: Block[] }

@@ -78,7 +78,7 @@
     {
       "name": "steering-wheel",
       "source": "./plugins/steering-wheel",
-      "description": "Steer Claude mid-turn with one key. /steering-wheel sets F5 to send a waiting message right away, and the hint under the prompt says so."
+      "description": "Steer Claude mid-turn with one chord. /steering-wheel sets Ctrl+X Ctrl+X to send a waiting message right away, and the hint under the prompt says so."
     },
     {
       "name": "rostech-glovebox",

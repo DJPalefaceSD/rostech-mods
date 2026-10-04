@@ -1,19 +1,24 @@
 # Steering Wheel
 
-Steer Claude mid-turn with one key.
+Steer Claude mid-turn with one chord.
 
-When Claude is working and you have typed your next message, Claude Code holds it until the turn ends. To send it right away and steer the work, the default is a two-step chord: Ctrl+X, then Ctrl+S. Steering Wheel makes it one key: F5.
+When Claude is working and you have typed your next message, Claude Code holds it until the turn ends. Steering Wheel lets you send it right away and steer the work. Press Ctrl+X, then Ctrl+X again.
 
 ## What it does
 
-- `/steering-wheel` adds F5 to your own `~/.claude/keybindings.json`, so F5 sends a waiting message now. Everything else in that file stays as you had it, and the old chord keeps working, because some terminals never pass F5 through.
-- The hint under the prompt then reads **tap F5 to send now**. The key it names is read from your keybindings file, so if you change the key yourself, the hint follows.
+- `/steering-wheel` adds Ctrl+X Ctrl+X to your own `~/.claude/keybindings.json`. That chord then sends a waiting message now.
+- Everything else in that file stays as you had it. The default chord, Ctrl+X Ctrl+S, keeps working too.
+- The hint under the prompt then reads **tap Ctrl+X Ctrl+X to send now**. It reads the key from your keybindings file, so if you change the key yourself, the hint follows.
+
+## Why not F5
+
+Versions 0.1.1 and before used F5. Claude Code does not take function keys, so F5 did nothing. Version 0.1.0 used Alt+Enter, which Windows Terminal keeps for full screen. Ctrl+X Ctrl+X works in any terminal.
+
+If an older version left F5 in your file, or switched Ctrl+X Ctrl+S off, `/steering-wheel` takes those two lines back out. It touches nothing else.
 
 ## Notes
 
 - A plugin cannot bind keys by itself. Your keys live in your own keybindings file, which is why Steering Wheel writes there only when you run `/steering-wheel`.
-- Why not Alt+Enter: Windows Terminal uses it for full screen, so it never reaches Claude Code there. Version 0.1.0 used it; 0.1.1 is back on F5.
 - Esc stays the stop button.
-- If F5 does nothing in your terminal, Ctrl+X Ctrl+S and Ctrl+Enter still send now.
 
 MIT licensed. Made by Rostech.
