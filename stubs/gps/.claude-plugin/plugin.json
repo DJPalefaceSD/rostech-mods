@@ -1,7 +1,7 @@
 {
   "name": "gps",
   "version": "0.0.1",
-  "description": "Where you are in a long job, and how much is left.",
+  "description": "A progress map for long jobs: where you are and how much is left. Not location tracking. It never reads where you or your computer are.",
   "author": {
     "name": "Rostech"
   },
