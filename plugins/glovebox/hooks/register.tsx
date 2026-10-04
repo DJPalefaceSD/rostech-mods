@@ -335,9 +335,17 @@ async function receiptsText($: EngineInterface, rest: string): Promise<string> {
   return `${ICON} The last ${rows.length} receipts (${RECEIPTS}, ${verdict}):\n` + rows.join('\n')
 }
 
-// The project glovebox, the one /glovebox changes.
+// The project glovebox, the one /glovebox changes. A failed write is raised as a
+// SaveError so the command can say where and why, instead of the hook throwing.
+class SaveError extends Error {}
 async function writeGlovebox($: EngineInterface, text: string): Promise<void> {
-  await $.fs.write('.claude/GLOVEBOX.md', text)
+  try {
+    await $.fs.write('.claude/GLOVEBOX.md', text)
+  } catch (err) {
+    const why = err instanceof Error ? err.message : String(err)
+    const code = /\b(E[A-Z]{2,})\b/.exec(why)?.[1]
+    throw new SaveError(`${join(norm(await $.session.cwd()), FILE)}${code ? ` (${code})` : ''}`)
+  }
 }
 
 async function answer($: EngineInterface, args: string): Promise<string> {
@@ -445,7 +453,12 @@ export const register: Register = on => {
   // Only /glovebox is answered here; any other command passes on unchanged.
   on('command.run', { command: 'glovebox' }, async ($, e, next) => {
     if (e.command !== 'glovebox') return next(e)
-    return { text: await answer($, e.args) }
+    try {
+      return { text: await answer($, e.args) }
+    } catch (err) {
+      if (!(err instanceof SaveError)) throw err
+      return { text: `${ICON} Nothing changed: the glovebox could not be saved to ${err.message}. Start Claude Code in your project folder and try again.` }
+    }
   })
 
   on('prompt.compose', async ($, e, next) => {

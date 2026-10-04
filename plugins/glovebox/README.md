@@ -118,6 +118,7 @@ What is known, from Claude Code's own docs (read 4 Oct 2026):
 - The plugin's id is now `rostech-glovebox`, because the name `glovebox` already belongs to someone else in the directory. The title and the `/glovebox` command are unchanged.
 - The user-level glovebox (`~/.claude/GLOVEBOX.md`) and `--user` are gone: finding them meant reading the home folder from the environment. Parent folders and the managed level are still read.
 - The receipt log is one file that only grows, with no rotation.
+- A glovebox that cannot be saved (Claude Code started in a folder it may not write to) now says where and why, instead of the command failing with an engine error.
 
 ## Next, not in 0.1.1
 

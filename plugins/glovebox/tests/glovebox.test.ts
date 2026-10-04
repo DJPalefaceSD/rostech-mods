@@ -8,7 +8,7 @@ const RECEIPTS = '.claude/glovebox/receipts.log'
 // A small disk in memory standing for the machine, with a session in PROJECT.
 // The plugin writes fixed relative paths; in a session they land in the working
 // directory, so here they are filed under PROJECT (the glovebox) or by name (its logs).
-function world(on: any, files: Record<string, string> = {}, receiptsFail = false) {
+function world(on: any, files: Record<string, string> = {}, receiptsFail = false, gloveboxFail = false) {
   const disk = new Map<string, string>(Object.entries(files))
   const norm = (p: string) => p.replace(/\\/g, '/')
   const key = (p: string) => {
@@ -24,6 +24,7 @@ function world(on: any, files: Record<string, string> = {}, receiptsFail = false
     let k = key(e.path)
     if (k.endsWith('/.claude/GLOVEBOX.md') && !k.startsWith(PROJECT)) k = PROJECT_FILE
     if (receiptsFail && k === RECEIPTS) throw new Error('disk full')
+    if (gloveboxFail && k === PROJECT_FILE) throw new Error('fs.write failed: EPERM')
     disk.set(k, e.text)
     return { value: undefined }
   })
@@ -243,4 +244,13 @@ test('a compaction with nothing to compact is skipped, never thrown', async ($, 
   await $.command.run({ command: 'glovebox', args: 'add the build command is make quux' })
   const result = await $.session.compact({ trigger: 'manual', messages: [] } as any)
   expect(result.skip).toBe('Not enough messages to compact.')
+})
+
+// ─── His second try, 4 Oct 2026: Claude Code started in C:WindowsSystem32 ───
+// The write failed with EPERM, the hook threw, and he saw "no command.run hook answered it".
+test('a glovebox that cannot be saved says where and why, never throws', async ($, on) => {
+  world(on, {}, false, true)
+  const r = await $.command.run({ command: 'glovebox', args: 'add the build command is make quux' })
+  expect(r.text).toContain('could not be saved')
+  expect(r.text).toContain('C:/work/proj')
 })
