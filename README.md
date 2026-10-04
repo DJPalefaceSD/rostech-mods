@@ -28,6 +28,7 @@ guard a tool call, or add a command. Mods need Claude Code 2.1.287 or later.
 | [Tach](plugins/tach) | A tachometer above the prompt: how fast you are burning tokens, over a window you choose. |
 | [Bumper Sticker](plugins/bumper-sticker) | Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest. |
 | [Valet Mode](plugins/valet-mode) | A look-only mode for someone else at your PC: Claude can read and answer, but cannot change anything. |
+| [Glovebox](plugins/glovebox) | Keeps the notes that matter in the glovebox, and hands them back to Claude after it compacts its memory. Text notes only. |
 
 Each mod lives in `plugins/<name>/`, with its own README. Ideas not built yet
 wait in `stubs/`.

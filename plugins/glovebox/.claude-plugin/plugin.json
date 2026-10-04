@@ -1,0 +1,18 @@
+{
+  "name": "glovebox",
+  "displayName": "Glovebox",
+  "version": "0.1.0",
+  "description": "Keeps the notes that matter in the glovebox, and hands them back to Claude after it compacts its memory. Text notes only: never video, never the screen, never your location. Sends nothing anywhere.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/glovebox",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/glovebox/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}
