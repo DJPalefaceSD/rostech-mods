@@ -464,6 +464,9 @@ export const register: Register = on => {
     // through here again; the entries are added then, so they are the newest.
     // A subagent's own compaction is left alone.
     if (e.trigger === 'precompute' || e.agentId) return next(e)
+    // A conversation with nothing in it has nothing to compact, and the engine
+    // refuses a next() handed an empty transcript. Say so, the way core does.
+    if (e.messages.length === 0) return { skip: 'Not enough messages to compact.' }
 
     let changed = ''
     const git = await $.process.run(['git', 'status', '--short'], { timeoutMs: 5000 }).catch(() => null)

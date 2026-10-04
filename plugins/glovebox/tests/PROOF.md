@@ -46,4 +46,10 @@ Leave out `--plugin-dir` for the run without.
 
 By hand in a session: `/glovebox add the build command is make quux`, then `/compact`, then ask for the build command. Then `/plugin` → disable Glovebox and do it again.
 
+## 4. Rerun after his first try, 4 Oct 2026
+
+His first hands-on try found `/compact` in a brand-new session threw ("next() passed an argument with an empty messages"). Fixed: an empty transcript is answered with a skip, "Not enough messages to compact." The suite holds it (red without the fix, green with it, 20 of 20).
+
+Then the live proof again on the fixed build, one run each way: with Glovebox `The build command is make quux`, without `UNKNOWN`. A `/compact` in a new session logged no Glovebox error, and Glovebox Pro's `verify` read the receipts the plugin wrote: "Chain intact."
+
 PROOF 0.1.0: PASS

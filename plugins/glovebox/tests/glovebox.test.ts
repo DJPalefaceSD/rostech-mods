@@ -245,3 +245,12 @@ test('a receipt that cannot be written never keeps the rules from Claude', async
   await $.command.run({ command: 'glovebox', args: 'add --every-turn answer in British English' })
   expect(standingOf(await $.prompt.compose(FACTS))).toContain('answer in British English')
 })
+
+// ─── His first try, 4 Oct 2026: /compact in a brand-new session threw ───
+// "next() passed an argument with an empty messages (a compaction leaves at least one)".
+test('a compaction with nothing to compact is skipped, never thrown', async ($, on) => {
+  world(on)
+  await $.command.run({ command: 'glovebox', args: 'add the build command is make quux' })
+  const result = await $.session.compact({ trigger: 'manual', messages: [] } as any)
+  expect(result.skip).toBe('Not enough messages to compact.')
+})
