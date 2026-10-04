@@ -1,20 +1,20 @@
-import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
 // Glovebox: short text notes, and pointers to files, that Claude gets back after it
 // compacts its memory, or on every turn. Text only. It reads files on this machine,
-// writes its own notes and a receipt log, and sends nothing anywhere.
+// writes three files of its own in the project, and sends nothing to any network.
 
-// 🏷️ THE NAME, IN ONE PLACE. A rename changes these lines, plugin.json, the
-// types file's key, and the atom keys below (they must match the plugin's name).
+// 🏷️ THE NAME. The plugin's id is `rostech-glovebox` (plugin.json, the types key, the
+// state refs and the section id below); the title and the command are Glovebox.
+// Every write path and every state ref is written out as fixed text where it is used,
+// so the directory can read it: a rename touches those lines too.
 export const TITLE = 'Glovebox'
 export const COMMAND = 'glovebox'
 export const FILENAME = 'GLOVEBOX.md'
 const ICON = '🧤'
-const SECTION_ID = 'glovebox:standing'
 
-// Where the project's own glovebox, its snapshot and its receipts live.
-export const FILE = `.claude/${FILENAME}`
+// The project's own glovebox, its snapshot and its receipts. Writes spell these out.
+export const FILE = '.claude/GLOVEBOX.md'
 export const SNAPSHOT = '.claude/glovebox/last-compact.md'
 export const RECEIPTS = '.claude/glovebox/receipts.log'
 
@@ -23,21 +23,14 @@ export const RECEIPTS = '.claude/glovebox/receipts.log'
 export const BUDGET = 200
 // How many changed files the snapshot keeps.
 export const SNAPSHOT_CAP = 30
-// Once the receipt log would pass this many lines it moves to receipts.log.1 (the
-// older ones shift to .2, .3, …) and a new log starts. Nothing is deleted.
-export const RECEIPTS_MAX = 2000
 
 // The managed-policy folders Claude Code documents for its own CLAUDE.md and
 // managed-settings.json. A GLOVEBOX.md placed there by an organisation is read first.
 export const MANAGED_DIRS = ['C:/Program Files/ClaudeCode', '/Library/Application Support/ClaudeCode', '/etc/claude-code']
 
-const lineCount = atom({ plugin: 'glovebox', key: 'lines' } as const, 0)
-const everyLines = atom({ plugin: 'glovebox', key: 'everyLines' } as const, 0)
-const everyTokens = atom({ plugin: 'glovebox', key: 'everyTokens' } as const, 0)
+// ─── Levels: managed, then each folder above the project, then the project ───
 
-// ─── Levels: managed, then user, then each folder above the project, then the project ───
-
-export type LevelKind = 'managed' | 'user' | 'parent' | 'project'
+export type LevelKind = 'managed' | 'parent' | 'project'
 export type Level = { kind: LevelKind; label: string; dir: string; file: string }
 
 export function norm(p: string): string {
@@ -66,7 +59,7 @@ export function walkDown(dir: string): string[] {
 }
 
 // The levels in the order they reach Claude: outer first, the project last.
-export function levels(cwd: string, home: string | undefined, managedDirs: readonly string[]): Level[] {
+export function levels(cwd: string, managedDirs: readonly string[]): Level[] {
   const out: Level[] = []
   const seen = new Set<string>()
   const add = (kind: LevelKind, label: string, dir: string, file: string) => {
@@ -76,7 +69,6 @@ export function levels(cwd: string, home: string | undefined, managedDirs: reado
     out.push({ kind, label, dir: norm(dir), file: norm(file) })
   }
   for (const m of managedDirs) add('managed', 'managed', m, join(m, FILENAME))
-  if (home) add('user', 'user', home, join(norm(home), FILE))
   const chain = walkDown(cwd)
   for (const dir of chain.slice(0, -1)) add('parent', `parent: ${dir}`, dir, join(dir, FILE))
   add('project', 'project', cwd, join(norm(cwd), FILE))
@@ -123,6 +115,11 @@ export function rewrite(existing: string, entries: readonly Entry[]): string {
 
 export type Loaded = Entry & { level: Level; path?: string; content?: string | null; lines: number }
 
+export function countLines(text: string): number {
+  const t = text.replace(/\r?\n$/, '')
+  return t ? t.split(/\r?\n/).length : 0
+}
+
 async function readText($: EngineInterface, path: string): Promise<string | null> {
   try {
     if (!(await $.fs.exists(path))) return null
@@ -133,22 +130,10 @@ async function readText($: EngineInterface, path: string): Promise<string | null
   }
 }
 
-export function countLines(text: string): number {
-  const t = text.replace(/\r?\n$/, '')
-  return t ? t.split(/\r?\n/).length : 0
-}
-
-async function homeDir($: EngineInterface): Promise<string | undefined> {
-  return (await $.env.get('HOME')) ?? (await $.env.get('USERPROFILE'))
-}
-
-async function allLevels($: EngineInterface): Promise<Level[]> {
-  return levels(await $.session.cwd(), await homeDir($), MANAGED_DIRS)
-}
-
 async function gather($: EngineInterface): Promise<Loaded[]> {
   const out: Loaded[] = []
-  for (const level of await allLevels($)) {
+  const cwd = await $.session.cwd()
+  for (const level of levels(cwd, MANAGED_DIRS)) {
     const text = await readText($, level.file)
     if (!text) continue
     for (const e of parse(text)) {
@@ -198,8 +183,8 @@ export function handBack(pieces: readonly string[], changed: string): string {
 // {"v":1,"t":ISO time,"trigger":"turn"|"compact","level":"managed"|"user"|"ancestor"|"project",
 //  "entry":"<path as written>" or "note:<n>","sha256":hex of the exact text injected for that entry,
 //  "prev":hex sha256 of the previous receipt line as written, or 64 zeros for the very first}
-// The prev chain makes the log tamper-evident. Rotation keeps the chain: the new file's
-// first line points at the old file's last line, and old files are kept, never deleted.
+// The prev chain makes the log tamper-evident. The free Glovebox keeps one file and only
+// ever appends to it: never trimmed, never rotated.
 
 export const ZERO = '0'.repeat(64)
 
@@ -230,7 +215,7 @@ export async function chain(prevLine: string | null, t: string, trigger: Trigger
   return out
 }
 
-// Checks a log's chain. `prevLine` is the line before the first (the rotated file's last), or null.
+// Checks a log's chain. `prevLine` is the line before the first, or null.
 export async function verifyChain(text: string, prevLine: string | null): Promise<{ ok: boolean; lines: number; brokenAt?: number }> {
   const lines = text.split(/\r?\n/).filter(Boolean)
   let before = prevLine
@@ -248,32 +233,15 @@ export function lastLine(text: string | null): string | null {
   return lines.length ? lines[lines.length - 1] : null
 }
 
-// The receipts.log.1, .2, … that rotation keeps.
-const rotated = (k: number) => `${RECEIPTS}.${k}`
-
-async function lineBeforeLog($: EngineInterface): Promise<string | null> {
-  return lastLine(await readText($, rotated(1)))
-}
-
-async function rotate($: EngineInterface, current: string): Promise<void> {
-  let top = 0
-  while (await $.fs.exists(rotated(top + 1))) top++
-  for (let k = top; k >= 1; k--) await $.fs.write(rotated(k + 1), (await readText($, rotated(k))) ?? '')
-  await $.fs.write(rotated(1), current)
-}
-
+// Appends the batch's receipts. The whole file is read and written back with the new
+// lines on the end; nothing before them is changed or dropped.
 async function writeReceipts($: EngineInterface, trigger: Trigger, stamps: readonly Stamp[]): Promise<void> {
   if (!stamps.length) return
   const t = new Date(await $.clock.now().catch(() => Date.now())).toISOString()
   const current = (await readText($, RECEIPTS)) ?? ''
-  let lines = current.split(/\r?\n/).filter(Boolean)
-  const prevLine = lines.length ? lines[lines.length - 1] : await lineBeforeLog($)
-  if (lines.length && lines.length + stamps.length > RECEIPTS_MAX) {
-    await rotate($, current)
-    lines = []
-  }
-  const added = await chain(prevLine, t, trigger, stamps)
-  await $.fs.write(RECEIPTS, [...lines, ...added].join('\n') + '\n')
+  const lines = current.split(/\r?\n/).filter(Boolean)
+  const added = await chain(lastLine(current), t, trigger, stamps)
+  await $.fs.write('.claude/glovebox/receipts.log', [...lines, ...added].join('\n') + '\n')
 }
 
 // One stamp per entry: files by their path as written, notes by their number in their level.
@@ -301,9 +269,9 @@ export function tokensOf(text: string): number {
 
 async function refresh($: EngineInterface, all: readonly Loaded[]): Promise<void> {
   const every = all.filter(e => e.every)
-  await update($, lineCount, () => all.reduce((a, e) => a + e.lines, 0))
-  await update($, everyLines, () => every.reduce((a, e) => a + e.lines, 0))
-  await update($, everyTokens, () => (every.length ? tokensOf(standing(every.map(piece))) : 0))
+  await $.state.set({ plugin: 'rostech-glovebox', key: 'lines' }, all.reduce((a, e) => a + e.lines, 0))
+  await $.state.set({ plugin: 'rostech-glovebox', key: 'everyLines' }, every.reduce((a, e) => a + e.lines, 0))
+  await $.state.set({ plugin: 'rostech-glovebox', key: 'everyTokens' }, every.length ? tokensOf(standing(every.map(piece))) : 0)
 }
 
 function overNote(total: number): string {
@@ -312,18 +280,16 @@ function overNote(total: number): string {
 
 // ─── The command ───
 
-type Flags = { user: boolean; every: boolean; words: string[] }
+type Flags = { every: boolean; words: string[] }
 
 export function flags(args: string): Flags {
   const words: string[] = []
-  let user = false
   let every = false
   for (const w of args.trim().split(/\s+/).filter(Boolean)) {
-    if (w === '--user') user = true
-    else if (w === '--every-turn') every = true
+    if (w === '--every-turn') every = true
     else words.push(w)
   }
-  return { user, every, words }
+  return { every, words }
 }
 
 function describe(e: Loaded, n: number): string {
@@ -344,121 +310,151 @@ function show(all: readonly Loaded[]): string {
     if (e.level.label !== label) {
       label = e.level.label
       n = 0
-      out.push('', `${label}${e.level.kind === 'managed' ? ' (read only)' : ''}:`)
+      out.push('', `${label}${e.level.kind === 'project' ? '' : ' (read only)'}:`)
     }
     out.push(describe(e, ++n))
   }
   return out.join('\n') + overNote(total)
 }
 
-async function targetFile($: EngineInterface, user: boolean): Promise<string | null> {
-  if (!user) return join(norm(await $.session.cwd()), FILE)
-  const h = await homeDir($)
-  return h ? join(norm(h), FILE) : null
+async function receiptsText($: EngineInterface, rest: string): Promise<string> {
+  const n = Math.max(1, Math.min(200, Number(rest) || 10))
+  const text = (await readText($, RECEIPTS)) ?? ''
+  const log = text.split(/\r?\n/).filter(Boolean)
+  if (!log.length) return 'No receipts yet. One is written each time the glovebox reaches Claude.'
+  const check = await verifyChain(text, null)
+  const rows = log.slice(-n).map(l => {
+    try {
+      const r = JSON.parse(l) as Receipt
+      return `${r.t}  ${r.trigger.padEnd(7)}  ${r.level.padEnd(8)}  ${r.entry}  ${r.sha256.slice(0, 12)}`
+    } catch {
+      return `(unreadable) ${l.slice(0, 60)}`
+    }
+  })
+  const verdict = check.ok ? `chain intact, ${check.lines} lines` : `⚠️ chain broken at line ${check.brokenAt}: a line was changed or removed`
+  return `${ICON} The last ${rows.length} receipts (${RECEIPTS}, ${verdict}):\n` + rows.join('\n')
+}
+
+// The project glovebox, the one /glovebox changes.
+async function writeGlovebox($: EngineInterface, text: string): Promise<void> {
+  await $.fs.write('.claude/GLOVEBOX.md', text)
+}
+
+async function answer($: EngineInterface, args: string): Promise<string> {
+  const { every, words } = flags(args)
+  const verb = (words[0] ?? '').toLowerCase()
+  const rest = words.slice(1).join(' ').trim()
+
+  if (verb === '' || verb === 'show') {
+    const all = await gather($)
+    await refresh($, all)
+    return show(all)
+  }
+  if (verb === 'receipts') return receiptsText($, rest)
+
+  // Read where gather() reads the project level; written back as fixed text, relative
+  // to the working directory, which is the session's.
+  const existing = (await readText($, join(norm(await $.session.cwd()), FILE))) ?? ''
+  const entries = parse(existing)
+
+  if (verb === 'add' || verb === 'add-file') {
+    if (!rest) return verb === 'add' ? `Nothing to add. /${COMMAND} add <note>` : `No file named. /${COMMAND} add-file <path>`
+    const entry: Entry = { kind: verb === 'add-file' ? 'file' : 'note', every, text: rest.replace(/\s+/g, ' ') }
+    await writeGlovebox($, rewrite(existing, [...entries, entry]))
+    const all = await gather($)
+    await refresh($, all)
+    const total = all.reduce((a, x) => a + x.lines, 0)
+    const turn = every ? ' 🔁 Every turn.' : ''
+    if (entry.kind === 'note') return `${ICON} Kept in the glovebox: ${entry.text}.${turn}${overNote(total)}`
+    const added = all.find(x => x.kind === 'file' && x.text === entry.text && x.level.kind === 'project')
+    const size = !added || added.content === null ? ' ⚠️ It is missing right now; it will be read again each time.' : ` ${added.lines} lines.`
+    const alone = added && added.lines > BUDGET ? ` ⚠️ This file alone is over the ${BUDGET}-line budget.` : ''
+    return `${ICON} 📄 ${entry.text} is in the glovebox, read fresh each time.${size}${turn}${alone}${overNote(total)}`
+  }
+
+  if (verb === 'drop') {
+    const n = Number(rest)
+    if (!Number.isInteger(n) || n < 1 || n > entries.length) {
+      return entries.length ? `No entry ${rest}. Pick 1 to ${entries.length}.` : 'The glovebox is empty.'
+    }
+    const gone = entries[n - 1]
+    await writeGlovebox($, rewrite(existing, entries.filter((_, i) => i !== n - 1)))
+    await refresh($, await gather($))
+    return `${ICON} Dropped entry ${n}: ${gone.kind === 'file' ? '📄 ' : ''}${gone.text}`
+  }
+
+  if (verb === 'clear') {
+    await writeGlovebox($, rewrite(existing, []))
+    await refresh($, await gather($))
+    return `${ICON} The glovebox is cleared (${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}).`
+  }
+
+  return `Try /${COMMAND}, add <note>, add-file <path>, drop <n>, clear, or receipts. Add --every-turn to send an entry every turn.`
+}
+
+// Before a compaction: the changed files, from `git status --short`, capped.
+async function changedFiles($: EngineInterface): Promise<string> {
+  const git = await $.process.run(['git', 'status', '--short'], { timeoutMs: 5000 }).catch(() => null)
+  if (!git || git.exitCode !== 0) return ''
+  const all = git.stdout.split(/\r?\n/).filter(Boolean)
+  return all.slice(0, SNAPSHOT_CAP).join('\n') + (all.length > SNAPSHOT_CAP ? `\n… and ${all.length - SNAPSHOT_CAP} more` : '')
+}
+
+async function writeSnapshot($: EngineInterface, changed: string): Promise<void> {
+  await $.fs.write('.claude/glovebox/last-compact.md', `# ${TITLE}: files changed at the last compaction\n\n${changed}\n`)
+}
+
+// Every turn: the [every-turn] entries, as one system-prompt section, with their receipts.
+// A receipt that cannot be written never keeps the rules from Claude.
+let turnLogged = -1
+const loggedThisTurn = new Set<string>()
+
+async function everyTurn($: EngineInterface): Promise<string | null> {
+  const all = await gather($)
+  await refresh($, all)
+  const every = all.filter(x => x.every)
+  if (!every.length) return null
+  const pieces = every.map(piece)
+  const turn = await $.session.turns()
+  if (turn !== turnLogged) { turnLogged = turn; loggedThisTurn.clear() }
+  const fresh = (await stampsOf(every, pieces)).filter(s => !loggedThisTurn.has(`${s.level}|${s.entry}|${s.sha256}`))
+  fresh.forEach(s => loggedThisTurn.add(`${s.level}|${s.entry}|${s.sha256}`))
+  await writeReceipts($, 'turn', fresh).catch(() => undefined)
+  return standing(pieces)
+}
+
+// After a compaction: the other entries and the changed files, as one message.
+async function afterCompact($: EngineInterface, changed: string): Promise<string> {
+  const kept = (await gather($)).filter(x => !x.every)
+  const pieces = kept.map(piece)
+  const text = handBack(pieces, changed)
+  if (text) await writeReceipts($, 'compact', await stampsOf(kept, pieces)).catch(() => undefined)
+  return text
 }
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
     await $.command.register({
-      name: COMMAND,
-      description: `Keep notes and files Claude gets back after it compacts. /${COMMAND} add <note> · add-file <path> · --every-turn · --user · drop <n> · clear · receipts`,
+      name: 'glovebox',
+      description: 'Keep notes and files Claude gets back after it compacts. /glovebox add <note> · add-file <path> · --every-turn · drop <n> · clear · receipts',
     })
     await refresh($, await gather($))
     return next(e)
   })
 
-  on('command.run', { command: COMMAND }, async ($, e) => {
-    const { user, every, words } = flags(e.args)
-    const verb = (words[0] ?? '').toLowerCase()
-    const rest = words.slice(1).join(' ').trim()
-
-    if (verb === '' || verb === 'show') {
-      const all = await gather($)
-      await refresh($, all)
-      return { text: show(all) }
-    }
-
-    if (verb === 'receipts') {
-      const n = Math.max(1, Math.min(200, Number(rest) || 10))
-      const text = (await readText($, RECEIPTS)) ?? ''
-      const log = text.split(/\r?\n/).filter(Boolean)
-      if (!log.length) return { text: 'No receipts yet. One is written each time the glovebox reaches Claude.' }
-      const check = await verifyChain(text, await lineBeforeLog($))
-      const rows = log.slice(-n).map(l => {
-        try {
-          const r = JSON.parse(l) as Receipt
-          return `${r.t}  ${r.trigger.padEnd(7)}  ${r.level.padEnd(8)}  ${r.entry}  ${r.sha256.slice(0, 12)}`
-        } catch {
-          return `(unreadable) ${l.slice(0, 60)}`
-        }
-      })
-      const verdict = check.ok ? `chain intact, ${check.lines} lines` : `⚠️ chain broken at line ${check.brokenAt}: a line was changed or removed`
-      return { text: `${ICON} The last ${rows.length} receipts (${RECEIPTS}, ${verdict}):\n` + rows.join('\n') }
-    }
-
-    const file = await targetFile($, user)
-    if (!file) return { text: 'No home folder found, so there is no user-level glovebox to change.' }
-    const existing = (await readText($, file)) ?? ''
-    const entries = parse(existing)
-    const where = user ? 'user' : 'project'
-
-    if (verb === 'add' || verb === 'add-file') {
-      if (!rest) return { text: verb === 'add' ? `Nothing to add. /${COMMAND} add <note>` : `No file named. /${COMMAND} add-file <path>` }
-      const entry: Entry = { kind: verb === 'add-file' ? 'file' : 'note', every, text: rest.replace(/\s+/g, ' ') }
-      await $.fs.write(file, rewrite(existing, [...entries, entry]))
-      const all = await gather($)
-      await refresh($, all)
-      const total = all.reduce((a, x) => a + x.lines, 0)
-      const turn = every ? ' 🔁 Every turn.' : ''
-      if (entry.kind === 'note') return { text: `${ICON} Kept in the ${where} glovebox: ${entry.text}.${turn}${overNote(total)}` }
-      const added = all.find(x => x.kind === 'file' && x.text === entry.text && x.level.kind === (user ? 'user' : 'project'))
-      const size = !added || added.content === null ? ' ⚠️ It is missing right now; it will be read again each time.' : ` ${added.lines} lines.`
-      const alone = added && added.lines > BUDGET ? ` ⚠️ This file alone is over the ${BUDGET}-line budget.` : ''
-      return { text: `${ICON} 📄 ${entry.text} is in the ${where} glovebox, read fresh each time.${size}${turn}${alone}${overNote(total)}` }
-    }
-
-    if (verb === 'drop') {
-      const n = Number(rest)
-      if (!Number.isInteger(n) || n < 1 || n > entries.length) {
-        return { text: entries.length ? `No entry ${rest}. Pick 1 to ${entries.length} in the ${where} glovebox.` : `The ${where} glovebox is empty.` }
-      }
-      const gone = entries[n - 1]
-      await $.fs.write(file, rewrite(existing, entries.filter((_, i) => i !== n - 1)))
-      await refresh($, await gather($))
-      return { text: `${ICON} Dropped ${where} entry ${n}: ${gone.kind === 'file' ? '📄 ' : ''}${gone.text}` }
-    }
-
-    if (verb === 'clear') {
-      await $.fs.write(file, rewrite(existing, []))
-      await refresh($, await gather($))
-      return { text: `${ICON} The ${where} glovebox is cleared (${entries.length} ${entries.length === 1 ? 'entry' : 'entries'}).` }
-    }
-
-    return { text: `Try /${COMMAND}, add <note>, add-file <path>, drop <n>, clear, or receipts. Add --every-turn or --user.` }
+  // Only /glovebox is answered here; any other command passes on unchanged.
+  on('command.run', { command: 'glovebox' }, async ($, e, next) => {
+    if (e.command !== 'glovebox') return next(e)
+    return { text: await answer($, e.args) }
   })
 
-  // Every turn: the [every-turn] entries go into the system prompt as standing
-  // instructions, read fresh from disk. Unchanged text keeps the prompt cache.
-  let turnLogged = -1
-  const loggedThisTurn = new Set<string>()
   on('prompt.compose', async ($, e, next) => {
     const composed = await next(e)
-    const all = await gather($)
-    await refresh($, all)
-    const every = all.filter(x => x.every)
-    if (!every.length) return composed
-    const pieces = every.map(piece)
-    const turn = await $.session.turns()
-    if (turn !== turnLogged) { turnLogged = turn; loggedThisTurn.clear() }
-    const fresh = (await stampsOf(every, pieces)).filter(s => !loggedThisTurn.has(`${s.level}|${s.entry}|${s.sha256}`))
-    fresh.forEach(s => loggedThisTurn.add(`${s.level}|${s.entry}|${s.sha256}`))
-    // A receipt that cannot be written never keeps the rules from Claude.
-    await writeReceipts($, 'turn', fresh).catch(() => undefined)
-    return { sections: [...composed.sections, { id: SECTION_ID, text: standing(pieces), scope: 'session' as const }] }
+    const text = await everyTurn($)
+    if (text === null) return composed
+    return { sections: [...composed.sections, { id: 'rostech-glovebox:standing', text, scope: 'session' as const }] }
   })
 
-  // Before a compaction, note which files had changed; after it, hand the other
-  // entries and that list back to Claude as the last message.
   on('session.compact', async ($, e, next) => {
     // A compaction computed ahead of time is replayed by the real one, which comes
     // through here again; the entries are added then, so they are the newest.
@@ -467,30 +463,20 @@ export const register: Register = on => {
     // A conversation with nothing in it has nothing to compact, and the engine
     // refuses a next() handed an empty transcript. Say so, the way core does.
     if (e.messages.length === 0) return { skip: 'Not enough messages to compact.' }
-
-    let changed = ''
-    const git = await $.process.run(['git', 'status', '--short'], { timeoutMs: 5000 }).catch(() => null)
-    if (git && git.exitCode === 0) {
-      const all = git.stdout.split(/\r?\n/).filter(Boolean)
-      changed = all.slice(0, SNAPSHOT_CAP).join('\n') + (all.length > SNAPSHOT_CAP ? `\n… and ${all.length - SNAPSHOT_CAP} more` : '')
-    }
-    if (changed) await $.fs.write(SNAPSHOT, `# ${TITLE}: files changed at the last compaction\n\n${changed}\n`)
-
+    const changed = await changedFiles($)
+    if (changed) await writeSnapshot($, changed)
     const result = await next(e)
     if (result.skip !== undefined) return result
-    const kept = (await gather($)).filter(x => !x.every)
-    const pieces = kept.map(piece)
-    const text = handBack(pieces, changed)
+    const text = await afterCompact($, changed)
     if (!text) return result
-    await writeReceipts($, 'compact', await stampsOf(kept, pieces)).catch(() => undefined)
     return { ...result, messages: [...result.messages, { role: 'user' as const, text, toolUses: [] }] }
   })
 
   on('ui.render', { component: 'AbovePrompt' }, async ($, e, next) => {
-    const n = await read($, lineCount)
+    const { value: n = 0 } = await $.state.get({ plugin: 'rostech-glovebox', key: 'lines' })
     if (e.props.hasSurvey || n === 0) return next(e)
-    const perTurn = await read($, everyLines)
-    const perTurnTokens = await read($, everyTokens)
+    const { value: perTurn = 0 } = await $.state.get({ plugin: 'rostech-glovebox', key: 'everyLines' })
+    const { value: perTurnTokens = 0 } = await $.state.get({ plugin: 'rostech-glovebox', key: 'everyTokens' })
     const { Box, Text } = $.ui.resolve(e)
     const below = await next(e)
     const isOver = n > BUDGET

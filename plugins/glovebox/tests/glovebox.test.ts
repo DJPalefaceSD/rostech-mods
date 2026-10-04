@@ -1,35 +1,36 @@
 import { expect, mock, test } from 'claude-code/testing'
-import { BUDGET, MANAGED_DIRS, RECEIPTS_MAX, ZERO, chain, handBack, lastLine, levels, parse, piece, rewrite, sha, verifyChain, walkDown } from '../hooks/register'
+import { BUDGET, MANAGED_DIRS, ZERO, chain, handBack, levels, parse, piece, rewrite, sha, verifyChain, walkDown } from '../hooks/register'
 
 const PROJECT = 'C:/work/proj'
-const HOME = 'C:/Users/me'
 const PROJECT_FILE = `${PROJECT}/.claude/GLOVEBOX.md`
-const USER_FILE = `${HOME}/.claude/GLOVEBOX.md`
+const RECEIPTS = '.claude/glovebox/receipts.log'
 
-// A small disk in memory standing for the machine, a session in PROJECT, and a home.
+// A small disk in memory standing for the machine, with a session in PROJECT.
+// The plugin writes fixed relative paths; in a session they land in the working
+// directory, so here they are filed under PROJECT (the glovebox) or by name (its logs).
 function world(on: any, files: Record<string, string> = {}, receiptsFail = false) {
   const disk = new Map<string, string>(Object.entries(files))
   const norm = (p: string) => p.replace(/\\/g, '/')
-  const find = (p: string) => {
+  const key = (p: string) => {
     const n = norm(p)
     if (disk.has(n)) return n
-    return [...disk.keys()].find(k => !k.startsWith('C:/') && n.endsWith('/' + k)) // relative paths (receipts)
+    if (n.endsWith('/.claude/glovebox/receipts.log')) return RECEIPTS
+    if (n.endsWith('/.claude/glovebox/last-compact.md')) return '.claude/glovebox/last-compact.md'
+    return n
   }
-  on('fs.exists', (_: unknown, e: { path: string }) => ({ value: find(e.path) !== undefined }))
-  on('fs.read', (_: unknown, e: { path: string }) => ({ value: disk.get(find(e.path) ?? '') ?? '' }))
+  on('fs.exists', (_: unknown, e: { path: string }) => ({ value: disk.has(key(e.path)) }))
+  on('fs.read', (_: unknown, e: { path: string }) => ({ value: disk.get(key(e.path)) ?? '' }))
   on('fs.write', (_: unknown, e: { path: string; text: string }) => {
-    const n = norm(e.path)
-    const log = /\.claude\/glovebox\/receipts\.log(\.\d+)?$/.exec(n)
-    const rel = log ? log[0] : n
-    if (receiptsFail && rel === '.claude/glovebox/receipts.log') throw new Error('disk full')
-    disk.set(rel, e.text)
+    let k = key(e.path)
+    if (k.endsWith('/.claude/GLOVEBOX.md') && !k.startsWith(PROJECT)) k = PROJECT_FILE
+    if (receiptsFail && k === RECEIPTS) throw new Error('disk full')
+    disk.set(k, e.text)
     return { value: undefined }
   })
   on('session.cwd', () => ({ value: PROJECT }))
   on('session.turns', () => ({ value: 1 }))
   on('process.run', () => ({ value: { exitCode: 0, stdout: '', stderr: '', isStdoutTruncated: false, isStderrTruncated: false } }))
   on('prompt.compose', () => ({ sections: [{ id: 'intro', text: 'The engine prompt.', scope: 'shared' }] }))
-  mock.env(on, { HOME })
   mock.clock(on)
   return disk
 }
@@ -37,7 +38,8 @@ function world(on: any, files: Record<string, string> = {}, receiptsFail = false
 // The facts a request is composed from, given whole so the kit has an input.
 const FACTS = { model: 'claude-test', promptModel: 'claude-test', surfaces: [], tools: [], outputStyle: null, traits: [] } as never
 
-const standingOf = (r: { sections: readonly { id: string; text: string }[] }) => r.sections.find(s => s.id === 'glovebox:standing')?.text
+const SECTION = 'rostech-glovebox:standing'
+const standingOf = (r: { sections: readonly { id: string; text: string }[] }) => r.sections.find(s => s.id === SECTION)?.text
 
 // ─── Levels ───
 
@@ -46,16 +48,10 @@ test('the walk goes from the root down to the project', async () => {
   expect(walkDown('/home/me/proj')).toEqual(['/', '/home', '/home/me', '/home/me/proj'])
 })
 
-test('levels run managed, user, parents outer first, then the project', async () => {
-  const ls = levels('C:\\work\\proj', 'C:\\Users\\me', MANAGED_DIRS)
-  expect(ls.map(l => l.label)).toEqual(['managed', 'managed', 'managed', 'user', 'parent: C:/', 'parent: C:/work', 'project'])
-  expect(ls[3].file).toBe('C:/Users/me/.claude/GLOVEBOX.md')
-  expect(ls[6].file).toBe('C:/work/proj/.claude/GLOVEBOX.md')
-})
-
-test('a home folder above the project is the user level, never read twice', async () => {
-  const ls = levels('/home/me/proj', '/home/me', [])
-  expect(ls.map(l => l.label)).toEqual(['user', 'parent: /', 'parent: /home', 'project'])
+test('levels run managed, then parents outer first, then the project', async () => {
+  const ls = levels('C:\\work\\proj', MANAGED_DIRS)
+  expect(ls.map(l => l.label)).toEqual(['managed', 'managed', 'managed', 'parent: C:/', 'parent: C:/work', 'project'])
+  expect(ls[5].file).toBe('C:/work/proj/.claude/GLOVEBOX.md')
 })
 
 // ─── Notes ───
@@ -75,7 +71,7 @@ test('add, show, drop and clear in the project glovebox', async ($, on) => {
   expect(shown.text).toContain('project:')
   expect(shown.text).toContain('1. the build command is `make quux`')
   const dropped = await $.command.run({ command: 'glovebox', args: 'drop 1' })
-  expect(dropped.text).toContain('Dropped project entry 1')
+  expect(dropped.text).toContain('Dropped entry 1')
   expect(disk.get(PROJECT_FILE)).not.toContain('make quux')
   const bad = await $.command.run({ command: 'glovebox', args: 'drop 9' })
   expect(bad.text).toContain('Pick 1 to 1')
@@ -84,14 +80,12 @@ test('add, show, drop and clear in the project glovebox', async ($, on) => {
   expect(parse(disk.get(PROJECT_FILE) ?? '')).toEqual([])
 })
 
-test('--user writes the user glovebox, and show lists it before the project', async ($, on) => {
-  const disk = world(on)
-  await $.command.run({ command: 'glovebox', args: 'add --user tabs, never spaces' })
+test('a glovebox in a parent folder is read, shown read only, before the project', async ($, on) => {
+  world(on, { 'C:/work/.claude/GLOVEBOX.md': '- tabs, never spaces\n' })
   await $.command.run({ command: 'glovebox', args: 'add project note' })
-  expect(disk.get(USER_FILE)).toContain('- tabs, never spaces')
   const shown = (await $.command.run({ command: 'glovebox', args: '' })).text
-  expect(shown.indexOf('user:')).toBeGreaterThan(-1)
-  expect(shown.indexOf('user:')).toBeLessThan(shown.indexOf('project:'))
+  expect(shown).toContain('parent: C:/work (read only):')
+  expect(shown.indexOf('parent: C:/work')).toBeLessThan(shown.indexOf('project:'))
 })
 
 test('a managed glovebox is read first and shown read only', async ($, on) => {
@@ -109,6 +103,13 @@ test('lines that are not entries stay as the person wrote them', async () => {
   const after = rewrite(before, [{ kind: 'note', every: false, text: 'two' }])
   expect(after).toContain('A line I typed.')
   expect(parse(after)).toEqual([{ kind: 'note', every: false, text: 'two' }])
+})
+
+test('only /glovebox is answered; another command passes on unchanged', async ($, on) => {
+  world(on)
+  on('command.run', () => ({ text: 'the engine answered' }))
+  const other = await $.command.run({ command: 'compact', args: '' })
+  expect(other.text).toBe('the engine answered')
 })
 
 // ─── Files: a pointer, read fresh ───
@@ -150,19 +151,19 @@ test('only [every-turn] entries reach the system prompt, as a session section', 
   expect(standingOf(await $.prompt.compose(FACTS))).toBeUndefined()
   await $.command.run({ command: 'glovebox', args: 'add --every-turn answer in British English' })
   const composed = await $.prompt.compose(FACTS)
-  const ours = composed.sections.find(s => s.id === 'glovebox:standing')
+  const ours = composed.sections.find(s => s.id === SECTION)
   expect(ours?.scope).toBe('session')
   expect(ours?.text).toContain('Standing instructions from Glovebox')
   expect(ours?.text).toContain('[project] answer in British English')
   expect(ours?.text).not.toContain('after compaction only')
 })
 
-test('each turn writes one receipt per entry, with a hash of the exact text', async ($, on) => {
+test('each turn writes one receipt per entry, in format v1', async ($, on) => {
   const disk = world(on)
   await $.command.run({ command: 'glovebox', args: 'add --every-turn answer in British English' })
   await $.prompt.compose(FACTS)
   await $.prompt.compose(FACTS) // a second request in the same turn writes no second receipt
-  const log = (disk.get('.claude/glovebox/receipts.log') ?? '').split('\n').filter(Boolean)
+  const log = (disk.get(RECEIPTS) ?? '').split('\n').filter(Boolean)
   expect(log.length).toBe(1)
   const r = JSON.parse(log[0])
   expect(Object.keys(r)).toEqual(['v', 't', 'trigger', 'level', 'entry', 'sha256', 'prev'])
@@ -178,17 +179,30 @@ test('each turn writes one receipt per entry, with a hash of the exact text', as
   expect(shown.text).toContain('note:1')
 })
 
-test('a file receipt names the path as written, and a second turn chains onto the first', async ($, on) => {
+test('a file receipt names the path as written, and the next one chains onto it', async ($, on) => {
   const disk = world(on, { [`${PROJECT}/RULES.md`]: 'Rule one.\n' })
   await $.command.run({ command: 'glovebox', args: 'add-file RULES.md --every-turn' })
   await $.prompt.compose(FACTS)
   disk.set(`${PROJECT}/RULES.md`, 'Rule one, changed.\n') // same turn, new text: a new receipt
   await $.prompt.compose(FACTS)
-  const text = disk.get('.claude/glovebox/receipts.log') ?? ''
+  const text = disk.get(RECEIPTS) ?? ''
   const log = text.split('\n').filter(Boolean).map(l => JSON.parse(l))
   expect(log.map(r => r.entry)).toEqual(['RULES.md', 'RULES.md'])
   expect(log[0].sha256).not.toBe(log[1].sha256)
   expect((await verifyChain(text, null)).ok).toBe(true)
+})
+
+test('the log only grows: a long log is kept whole, never trimmed or rotated', async ($, on) => {
+  const s = (i: number) => ({ level: 'project' as const, entry: `note:${i}`, sha256: 'ef'.repeat(32) })
+  const old = (await chain(null, '2026-10-03T00:00:00.000Z', 'turn', Array.from({ length: 3000 }, (_, i) => s(i + 1)))).join('\n') + '\n'
+  const disk = world(on, { [RECEIPTS]: old })
+  await $.command.run({ command: 'glovebox', args: 'add --every-turn answer in British English' })
+  await $.prompt.compose(FACTS)
+  const now = disk.get(RECEIPTS) ?? ''
+  expect(now.startsWith(old)).toBe(true)
+  expect(now.split('\n').filter(Boolean).length).toBe(3001)
+  expect((await verifyChain(now, null)).ok).toBe(true)
+  expect([...disk.keys()].some(k => /receipts\.log\.\d/.test(k))).toBe(false)
 })
 
 test('the chain verifies, and a changed or removed line breaks it', async () => {
@@ -202,34 +216,10 @@ test('the chain verifies, and a changed or removed line breaks it', async () => 
   expect(await verifyChain(removed, null)).toEqual({ ok: false, lines: 2, brokenAt: 2 })
 })
 
-test('a full log moves to receipts.log.1, nothing is deleted, and the chain carries on', async ($, on) => {
-  const s = (i: number) => ({ level: 'project' as const, entry: `note:${i}`, sha256: 'ef'.repeat(32) })
-  const full = (await chain(null, '2026-10-03T00:00:00.000Z', 'turn', Array.from({ length: RECEIPTS_MAX }, (_, i) => s(i + 1)))).join('\n') + '\n'
-  const older = 'an older rotated log\n'
-  const disk = world(on, { '.claude/glovebox/receipts.log': full, '.claude/glovebox/receipts.log.1': older })
-  await $.command.run({ command: 'glovebox', args: 'add --every-turn answer in British English' })
-  await $.prompt.compose(FACTS)
-  expect(disk.get('.claude/glovebox/receipts.log.2')).toBe(older)
-  expect(disk.get('.claude/glovebox/receipts.log.1')).toBe(full)
-  const now = disk.get('.claude/glovebox/receipts.log') ?? ''
-  expect(now.split('\n').filter(Boolean).length).toBe(1)
-  expect((await verifyChain(now, lastLine(full))).ok).toBe(true)
-  const shown = await $.command.run({ command: 'glovebox', args: 'receipts' })
-  expect(shown.text).toContain('chain intact')
-})
-
-test('across a rotation the new file chains onto the old one', async () => {
-  const s = (i: number) => ({ level: 'user' as const, entry: `note:${i}`, sha256: 'cd'.repeat(32) })
-  const old = (await chain(null, '2026-10-04T00:00:00.000Z', 'compact', [s(1), s(2)])).join('\n') + '\n'
-  const next = (await chain(lastLine(old), '2026-10-04T00:01:00.000Z', 'compact', [s(3)])).join('\n') + '\n'
-  expect((await verifyChain(next, lastLine(old))).ok).toBe(true)
-  expect((await verifyChain(next, null)).ok).toBe(false)
-})
-
 // ─── After a compaction (the kit has no conversation to compact; PROOF.md checks it live) ───
 
 test('the hand-back carries the entries and the changed files', async () => {
-  const level = levels('/p', undefined, [])[1]
+  const level = levels('/p', [])[1]
   const note = piece({ kind: 'note', every: false, text: 'the build command is `make quux`', level, lines: 1 })
   const missing = piece({ kind: 'file', every: false, text: 'GONE.md', level, content: null, lines: 0 })
   const text = handBack([note, missing], ' M src/app.ts')

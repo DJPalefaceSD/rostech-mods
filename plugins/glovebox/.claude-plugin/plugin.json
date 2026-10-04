@@ -1,7 +1,7 @@
 {
-  "name": "glovebox",
+  "name": "rostech-glovebox",
   "displayName": "Glovebox",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Keeps the notes that matter in the glovebox, and hands them back to Claude after it compacts its memory. Text notes only: never video, never the screen, never your location. Sends nothing anywhere.",
   "author": {
     "name": "Rostech"

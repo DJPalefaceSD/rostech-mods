@@ -53,3 +53,16 @@ His first hands-on try found `/compact` in a brand-new session threw ("next() pa
 Then the live proof again on the fixed build, one run each way: with Glovebox `The build command is make quux`, without `UNKNOWN`. A `/compact` in a new session logged no Glovebox error, and Glovebox Pro's `verify` read the receipts the plugin wrote: "Chain intact."
 
 PROOF 0.1.0: PASS
+
+## 5. 0.1.1, after the rename to rostech-glovebox, 4 Oct 2026
+
+Same script, Claude Code 2.1.289, `claude-haiku-4-5-20251001`, one run each way, both entries in one glovebox.
+
+| | After a compaction | Every turn |
+|---|---|---|
+| With Glovebox | `The build command is make quux` | `The deploy word is pineapple` |
+| Without | `UNKNOWN` | `UNKNOWN` |
+
+Receipts: 5 lines, 4 `turn` and 1 `compact`, all in the single append-only `receipts.log`. Checked outside the mod with Node's `crypto`: chain intact, the `compact` sha256 equals the SHA-256 of `[project] the build command is \`make quux\``, and the `turn` sha256 equals that of `[project] the deploy word is pineapple`.
+
+PROOF 0.1.1: PASS
