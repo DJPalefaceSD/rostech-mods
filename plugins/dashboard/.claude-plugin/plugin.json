@@ -1,0 +1,44 @@
+{
+  "name": "rostech-dashboard",
+  "displayName": "Dashboard",
+  "version": "0.1.0",
+  "description": "A Dashboard button above the prompt that opens a panel you fill yourself: effort, helper model, launch buttons and a status row. Fully customisable: just ask your Claude to put what you want in it.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "types": "./types/index.d.ts",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/dashboard",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/dashboard/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md",
+  "userConfig": {
+    "buttons": {
+      "type": "string",
+      "title": "Launch buttons",
+      "description": "Buttons that send a prompt as if you typed it. Write Label=prompt, separated by semicolons, e.g. Review=review my last change; Tests=run the tests. Leave it empty for none.",
+      "default": ""
+    },
+    "statusLabel": {
+      "type": "string",
+      "title": "Status row label",
+      "description": "The word in front of the status row.",
+      "default": "STATUS"
+    },
+    "statusCommand": {
+      "type": "string",
+      "title": "Status row command",
+      "description": "A program and its arguments, run when the panel opens and after each turn while it is open, e.g. git log -1 --oneline. The row shows the first line it prints, or a count like 3 of 6 if it prints one. Not run through a shell. Leave it empty to hide the row.",
+      "default": ""
+    },
+    "statusFolder": {
+      "type": "string",
+      "title": "Status row folder",
+      "description": "The folder the status command runs in. Leave it empty for the folder Claude Code started in.",
+      "default": ""
+    }
+  }
+}

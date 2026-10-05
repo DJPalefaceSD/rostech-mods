@@ -84,6 +84,11 @@
       "name": "rostech-glovebox",
       "source": "./plugins/glovebox",
       "description": "Keeps the notes that matter in the glovebox, and hands them back to Claude after it compacts its memory. Text notes only."
+    },
+    {
+      "name": "rostech-dashboard",
+      "source": "./plugins/dashboard",
+      "description": "A Dashboard button above the prompt that opens a panel you fill yourself: effort, helper model, launch buttons and a status row. Fully customisable."
     }
   ]
 }
