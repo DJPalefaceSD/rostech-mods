@@ -40,3 +40,18 @@ of blank and default but lets ship it now and then ill customize mine".
   `rostech-dashboard@rostech`; checked on his install, not here.
 
 PROOF 0.1.0: PASS
+
+## 0.1.1 — 5 Oct 2026
+
+What changed: a status command that fails now shows `failed (<code>): <first stderr line>`
+(or `could not run: …`) instead of a silent "no reading yet", and the status is read as
+soon as the mod loads, not only when the panel opens. Found live on Ryan's machine.
+
+- Live, `claude -p "/dashboard" --plugin-dir plugins/dashboard`, his settings:
+  `Dashboard opened. PIPE: 2 of 18`.
+- Live, a person: the identical status code runs in Ryan's own copy; his words after the
+  fix, "now its working".
+- Suite: 14 pass, 0 fail. The new test ("a status command that fails says why") fails on
+  0.1.0's code and passes on 0.1.1.
+
+PROOF 0.1.1: PASS

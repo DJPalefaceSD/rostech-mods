@@ -90,9 +90,12 @@ async function readStatus($: EngineInterface, cfg: StatusCommand) {
   if (!cfg.argv.length) return
   try {
     const run = await $.process.run(cfg.argv, { ...(cfg.folder ? { cwd: cfg.folder } : {}), timeoutMs: 20000 })
-    await update($, status, () => readOutput(run.stdout))
-  } catch {
-    await update($, status, () => null)
+    // A failed command says why, never a silent "no reading yet".
+    const err = run.stderr.trim().split(/\r?\n/)[0] ?? ''
+    const said = readOutput(run.stdout) ?? (run.exitCode !== 0 ? { count: null, line: `failed (${run.exitCode}): ${err}` } : null)
+    await update($, status, () => said)
+  } catch (err) {
+    await update($, status, () => ({ count: null, line: `could not run: ${String((err as Error)?.message ?? err)}` }))
   }
 }
 
@@ -111,6 +114,8 @@ export const register: Register = (on, options) => {
   const cfg: StatusCommand = { argv, folder }
 
   on('session.start', async ($, e, next) => {
+    // Read the status as soon as the mod loads, not only when the panel opens.
+    void readStatus($, cfg)
     await $.command.register({ name: 'dashboard', description: 'Open the Dashboard: effort, helper agents, your launch buttons and status row.' })
     return next(e)
   })

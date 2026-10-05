@@ -1,7 +1,7 @@
 {
   "name": "rostech-dashboard",
   "displayName": "Dashboard",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A Dashboard button above the prompt that opens a panel you fill yourself: effort, helper model, launch buttons and a status row. Fully customisable: just ask your Claude to put what you want in it.",
   "author": {
     "name": "Rostech"

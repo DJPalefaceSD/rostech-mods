@@ -133,6 +133,18 @@ test('a status command with no count shows its first line; quotes keep a part wh
     await ui.unmount()
   })
 
+test('a status command that fails says why, never "no reading yet"',
+  { options: { statusLabel: 'PIPE', statusCommand: 'node missing.js' } }, async ($, on) => {
+    on('ui.open', () => ({ value: { isPlaced: true } }) as never)
+    on('process.run', () => ({ value: { ...ran(''), exitCode: 1, stderr: 'Error: Cannot find module missing.js\n    at x' } }) as never)
+    const answer = await $.command.run({ command: 'dashboard', args: '' } as never)
+    expect(answer.text).toBe('Dashboard opened. PIPE: failed (1): Error: Cannot find module missing.js')
+    const ui = await $.ui.mount({ plugin: PLUGIN, surface: 'terminal', ...PANE } as never)
+    expect(await ui.find({ text: /no reading yet/ })).toBeUndefined()
+    expect(await ui.find({ text: /failed \(1\)/ })).toBeDefined()
+    await ui.unmount()
+  })
+
 test('the status row runs nothing when no command is set', async ($, on) => {
   let runs = 0
   on('ui.open', () => ({ value: { isPlaced: true } }) as never)
