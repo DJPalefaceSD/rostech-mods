@@ -105,11 +105,11 @@ export const register: Register = on => {
     const path = `${home}/.claude/keybindings.json`
     const text = (await $.fs.exists(path)) ? await $.fs.read(path) : null
     key = sendKey(parse(text)) ?? DEFAULT_CHORD
-    $.command.register({ name: NAME, description: 'Set Ctrl+X Ctrl+X to send a waiting message now' })
+    await $.command.register({ name: NAME, description: 'Set Ctrl+X Ctrl+X to send a waiting message now' })
     return next(e)
   })
 
-  on('command.run', { name: NAME }, async $ => {
+  on('command.run', { command: NAME }, async ($, e) => {
     const home = (await $.env.get('USERPROFILE')) || (await $.env.get('HOME')) || ''
     const path = `${home}/.claude/keybindings.json`
     const before = parse((await $.fs.exists(path)) ? await $.fs.read(path) : null)

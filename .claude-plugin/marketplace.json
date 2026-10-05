@@ -76,9 +76,9 @@
       "description": "Your own words on the busy line while Claude works, in place of Baking, Brewing and the rest."
     },
     {
-      "name": "steering-wheel",
-      "source": "./plugins/steering-wheel",
-      "description": "Steer Claude mid-turn with one chord. /steering-wheel sets Ctrl+X Ctrl+X to send a waiting message right away, and the hint under the prompt says so."
+      "name": "horn",
+      "source": "./plugins/horn",
+      "description": "One chord to send now: /horn sets Ctrl+X Ctrl+X to send a waiting message right away, like a tap on the horn, and the hint under the prompt says so."
     },
     {
       "name": "rostech-glovebox",

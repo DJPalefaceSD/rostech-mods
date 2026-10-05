@@ -1,7 +1,7 @@
 {
   "name": "steering-wheel",
   "displayName": "Steering Wheel",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Steer Claude mid-turn with one chord. /steering-wheel sets Ctrl+X Ctrl+X to send a waiting message right away, and the hint under the prompt says so.",
   "author": {
     "name": "Rostech"
