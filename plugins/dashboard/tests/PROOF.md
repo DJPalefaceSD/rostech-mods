@@ -55,3 +55,17 @@ soon as the mod loads, not only when the panel opens. Found live on Ryan's machi
   0.1.0's code and passes on 0.1.1.
 
 PROOF 0.1.1: PASS
+
+## 0.1.2 — 5 Oct 2026
+
+What changed: the README only. It answers the directory's review notes: what the mod
+sends and where (the `turn.step` hook: effort and helper model), which program it runs
+and why (only the status command you set), and what its launch buttons submit.
+
+- KNOWN: `git diff --stat 1c887d1 HEAD -- plugins/dashboard` touches `README.md` and the
+  version in `plugin.json`, nothing else. The code is 0.1.1's, which passed above.
+- A live `claude -p "/dashboard" --plugin-dir plugins/dashboard` did NOT load the mod this
+  time ("`/dashboard` also isn't among the commands this session can see"), so no new live
+  reading is claimed.
+
+PROOF 0.1.2: NONE — README only; the code is byte for byte 0.1.1, which passed

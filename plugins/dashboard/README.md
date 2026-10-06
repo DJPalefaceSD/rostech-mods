@@ -49,9 +49,33 @@ at most.
 
 ## What it runs and sends
 
-It runs only the status command you set, and only while the panel is open.
-Its output stays on your screen. The launch buttons send their text to Claude
-in your conversation. Nothing goes to any other service.
+Nothing goes to any service except Anthropic, through Claude Code's own
+requests. Here is each thing, plainly.
+
+**What it sends, and where.** It changes nothing it does not name here.
+- Every request Claude Code sends to Anthropic passes through the mod's
+  `turn.step` hook on its way out. That hook is Claude Code's own request to
+  the model, not a new connection.
+- If you picked an effort, the hook sets that request's effort to your pick.
+  On Auto it leaves the request alone.
+- If Helper agents is Fast & Cheap, the hook sets a subagent's request to the
+  model `claude-haiku-4-5-20251001`. Your own messages keep your model.
+- The request still goes only to Anthropic, the same way it would without the
+  mod. The mod adds no text to it.
+
+**Which programs it runs, and why.**
+- Only the one program you write into **Status row command**, to show one line
+  of status on the panel. Empty means it runs nothing.
+- It cannot be written as fixed text in the mod, because you choose it. The
+  mod runs exactly what you typed: the program and its arguments, directly,
+  never through a shell, in **Status row folder**, for at most 20 seconds.
+- It runs when the panel opens and after each turn while the panel is open.
+  Its output stays on your screen and is never sent anywhere.
+
+**What it puts in the prompts it submits.**
+- A launch button submits exactly the prompt you wrote for it in **Launch
+  buttons**, as if you typed it. The mod adds nothing and changes nothing.
+- It submits nothing else, ever. With no buttons set, it never submits.
 
 The panel draws in the terminal and in the Code tab of the Claude desktop app.
 
