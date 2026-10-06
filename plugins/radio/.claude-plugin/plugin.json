@@ -1,7 +1,7 @@
 {
   "name": "radio",
   "displayName": "Radio",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "A chime when Claude finishes a long turn, so you can look away.",
   "author": {
     "name": "Rostech"

@@ -1,7 +1,7 @@
 {
   "name": "horn",
   "displayName": "Horn",
-  "version": "0.2.0",
+  "version": "0.2.1",
   "description": "One chord to send now: /horn sets Ctrl+X Ctrl+X to send a waiting message right away, like a tap on the horn, and the hint under the prompt says so.",
   "author": {
     "name": "Rostech"

@@ -1,7 +1,7 @@
 {
   "name": "sticky-note",
   "displayName": "Sticky Note",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "A note above the prompt that stays until you clear it.",
   "author": {
     "name": "Rostech"

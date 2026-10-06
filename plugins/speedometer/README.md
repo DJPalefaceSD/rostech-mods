@@ -15,4 +15,28 @@ Gas Gauge's sibling on the same dash. The band draws in the terminal and in
 the Code tab of the Claude desktop app. It reads only the figures Claude Code
 already has, and sends nothing anywhere.
 
+## What it runs and sends
+
+Nothing goes anywhere. Here is each thing, plainly.
+
+**What it sends, and where.**
+- Nothing. It reads how full the context window is from Claude Code, with
+  `$.session.usage`, and shows it on your screen.
+- It stores nothing on disk.
+
+**Which programs it runs, and why.**
+- None. It runs no programs.
+
+**What it puts in the prompts it submits.**
+- It submits no prompts, and changes none of yours.
+
+**What each hook does.**
+- `session.start`: adds the `/speed` and `/speedometer` commands and reads
+  the context fill.
+- `session.measure`: takes the new fill, and shows one toast when it crosses
+  85%.
+- `command.run` for `speed`, and for `speedometer`: prints the dial, or
+  hides or shows the band.
+- `ui.render` for `AbovePrompt`: draws the dial above the prompt.
+
 Tested with Claude Code 2.1.287.

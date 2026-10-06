@@ -1,7 +1,7 @@
 {
   "name": "shot",
   "displayName": "Shot",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Hand Claude the picture on your clipboard in one command.",
   "author": {
     "name": "Rostech"

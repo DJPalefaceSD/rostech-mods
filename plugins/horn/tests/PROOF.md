@@ -21,3 +21,19 @@ Reply: "Ctrl+X Ctrl+X already sends now. Nothing changed." The file was left byt
 The first run answered "horn registered /horn but no command.run hook answered it". The hook filtered on `{ name }` where the engine matches `{ command }`, so `/horn` did nothing at all. Fixed, then run again above. Steering Wheel had the same fault.
 
 PROOF 0.2.0: PASS
+
+## 0.2.1 — 5 Oct 2026
+
+What changed: the README only. It answers the directory review notes in a new section,
+"What it runs and sends": what the mod sends and where, which programs it runs and why, what
+it puts in the prompts it submits, and what each hook does.
+
+- KNOWN: `git diff --stat 47112eb -- plugins/horn`, before this file was written:
+
+    plugins/horn/.claude-plugin/plugin.json |  2 +-
+    plugins/horn/README.md                  | 26 ++++++++++++++++++++++++++
+    2 files changed, 27 insertions(+), 1 deletion(-)
+
+  The README and the version in `plugin.json`, nothing else.
+
+PROOF 0.2.1: NONE — README only; the code is byte for byte 0.2.0, which passed

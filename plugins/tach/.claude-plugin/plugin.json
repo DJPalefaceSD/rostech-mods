@@ -1,7 +1,7 @@
 {
   "name": "tach",
   "displayName": "Tach",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A tachometer above the prompt: how fast you are burning tokens, over a window you choose.",
   "author": {
     "name": "Rostech"

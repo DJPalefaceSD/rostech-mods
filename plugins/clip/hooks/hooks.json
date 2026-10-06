@@ -1,4 +1,3 @@
 {
-  "description": "The clip hooks module",
   "modules": ["./register.ts"]
 }

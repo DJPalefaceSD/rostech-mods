@@ -1,7 +1,7 @@
 {
   "name": "pin",
   "displayName": "Pin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A short to-do list pinned above the prompt, ticked off with one click.",
   "author": {
     "name": "Rostech"
