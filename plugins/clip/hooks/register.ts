@@ -32,17 +32,28 @@ async function copy($: EngineInterface, text: string): Promise<boolean> {
 }
 
 export const register: Register = on => {
+  // /clip can already belong to something of yours, a skill or another mod. When
+  // it does, the mod answers to /clipboard instead, and the start carries on.
   on('session.start', async ($, e, next) => {
-    await $.command.register({ name: 'clip', description: 'Put text on your clipboard, cleaned of terminal clutter. /clip <text>' })
+    const NAMES = ['clip', 'clipboard']
+    for (const name of NAMES) {
+      const ok = await $.command
+        .register({ name, description: `Put text on your clipboard, cleaned of terminal clutter. /${name} <text>` })
+        .then(() => true, () => false)
+      if (ok) break
+    }
     return next(e)
   })
 
-  on('command.run', { command: 'clip' }, async ($, e) => {
-    const text = clean(e.args)
-    if (!text) return { text: 'Nothing to copy. /clip <text> puts that text on your clipboard.' }
-    const ok = await copy($, text)
-    if (!ok) return { text: 'No clipboard program answered on this machine, so nothing was copied.' }
-    const chars = [...text].length
-    return { text: `📎 On your clipboard: ${chars} character${chars === 1 ? '' : 's'}.` }
-  })
+  on('command.run', { command: 'clip' }, async ($, e) => ({ text: await clipText($, e.args) }))
+  on('command.run', { command: 'clipboard' }, async ($, e) => ({ text: await clipText($, e.args) }))
+}
+
+async function clipText($: EngineInterface, args: string): Promise<string> {
+  const text = clean(args)
+  if (!text) return 'Nothing to copy. /clip <text> puts that text on your clipboard.'
+  const ok = await copy($, text)
+  if (!ok) return 'No clipboard program answered on this machine, so nothing was copied.'
+  const chars = [...text].length
+  return `📎 On your clipboard: ${chars} character${chars === 1 ? '' : 's'}.`
 }

@@ -6,6 +6,9 @@ of the terminal by hand.
 
 - `/clip <text>` puts that text on your clipboard.
 
+If `/clip` already belongs to something of yours, a skill or another mod, Clip
+answers to `/clipboard <text>` instead.
+
 Clip strips box edges, prompt marks and trailing spaces from every line, and
 blank lines from the top and bottom, before it copies.
 
@@ -39,8 +42,8 @@ Nothing goes to any service. Here is each thing, plainly.
 - It submits no prompts. It never touches your prompt box.
 
 **What each hook does.**
-- `session.start`: adds the `/clip` command.
-- `command.run` for `clip`: cleans the text you typed, runs the clipboard
+- `session.start`: adds the `/clip` command, or `/clipboard` when `/clip` is taken.
+- `command.run` for `clip` and `clipboard`: cleans the text you typed, runs the clipboard
   program, and says how many characters it copied.
 
 Tested with Claude Code 2.1.287 on Windows.

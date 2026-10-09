@@ -35,7 +35,11 @@ async function chime($: EngineInterface) {
 
 export const register: Register = on => {
   on('session.start', async ($, e, next) => {
-    await $.command.register({ name: 'radio', description: 'A chime when a long turn finishes. /radio sound <a .wav>, /radio off, /radio on, /radio test.' })
+    // /chime is Claude Code's own command now, so the mod answers to /chime. A
+    // refused name must never stop the rest of the start, or your sound is lost.
+    await $.command
+      .register({ name: 'chime', description: 'A chime when a long turn finishes. /chime sound <a .wav>, /chime off, /chime on, /chime test.' })
+      .catch(() => undefined)
     const kept = await $.store.get('ownSound')
     if (typeof kept === 'string') await update($, ownSound, () => kept)
     return next(e)
@@ -54,7 +58,7 @@ export const register: Register = on => {
     return next(e)
   })
 
-  on('command.run', { command: 'radio' }, async ($, e) => {
+  on('command.run', { command: 'chime' }, async ($, e) => {
     const [verb, ...rest] = e.args.trim().split(/\s+/)
     const arg = verb.toLowerCase()
     if (arg === 'off' || arg === 'on') {
@@ -68,11 +72,11 @@ export const register: Register = on => {
         await $.store.set('ownSound', '')
         return { text: 'Radio plays its own chime again.' }
       }
-      if (!/\.wav$/i.test(path)) return { text: 'The sound has to be a .wav file. /radio sound C:/path/to/chime.wav' }
+      if (!/\.wav$/i.test(path)) return { text: 'The sound has to be a .wav file. /chime sound C:/path/to/chime.wav' }
       if (!(await playFile($, path))) return { text: `Could not play ${path}. Check the path, and that it is a .wav.` }
       await update($, ownSound, () => path)
       await $.store.set('ownSound', path)
-      return { text: `Radio now plays ${path}. That was it. /radio sound default goes back.` }
+      return { text: `Radio now plays ${path}. That was it. /chime sound default goes back.` }
     }
     if (arg === 'test') {
       // Your chime (or the bundled one), then the whistle, one after the other.
@@ -81,6 +85,6 @@ export const register: Register = on => {
     }
     const own = await read($, ownSound)
     const which = own ? ` It plays ${own}.` : ''
-    return { text: (await read($, isOff)) ? 'Radio is off. /radio on turns it on.' : `Radio is on. A chime plays when a turn longer than 20 seconds finishes.${which}` }
+    return { text: (await read($, isOff)) ? 'Radio is off. /chime on turns it on.' : `Radio is on. A chime plays when a turn longer than 20 seconds finishes.${which}` }
   })
 }

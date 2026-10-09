@@ -26,3 +26,14 @@ What changed: the README, and one line in `hooks/hooks.json`.
   on this machine. No new live reading is claimed.
 
 PROOF 0.1.1: NONE — README and one unread hooks.json field removed; the code is byte for byte 0.1.0, which had no proof run recorded; validate --strict and 2 tests pass
+
+## 0.1.2 — 9 Oct 2026
+
+What changed: when `/clip` is already taken (here, his own /clip skill), the mod registers
+`/clipboard` instead of throwing `"/clip" refused: it is the user's /clip` at every start.
+
+- KNOWN: `claude plugin validate --strict plugins/clip` passes. `claude plugin test plugins/clip`: 3 pass, 0 fail.
+- KNOWN: the new test fails on the 0.1.1 code and passes on 0.1.2.
+- No live session was started on 0.1.2 before this line was written.
+
+PROOF 0.1.2: NONE — no live session run yet; the refusal is reproduced and passing in tests
