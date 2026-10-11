@@ -126,3 +126,7 @@ What is known, from Claude Code's own docs (read 4 Oct 2026):
 - A user-level glovebox for every project, found without reading the environment.
 
 Tested with Claude Code 2.1.289.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

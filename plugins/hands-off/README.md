@@ -38,3 +38,7 @@ It could not stop a write. It only made a write deliberate instead of an acciden
 This mod is the version that stops it.
 
 Tested with Claude Code 2.1.287.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

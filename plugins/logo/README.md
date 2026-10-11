@@ -27,3 +27,7 @@ terminal's own colour.
 Windows only for now, because reading the PNG uses PowerShell.
 
 Tested with Claude Code 2.1.288.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

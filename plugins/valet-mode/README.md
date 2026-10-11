@@ -22,3 +22,7 @@ Valet Mode stays locked rather than opening up. It is a simple lock for a guest
 at your desk, not a security system. It sends nothing anywhere.
 
 Tested with Claude Code 2.1.288.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

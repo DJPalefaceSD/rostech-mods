@@ -16,3 +16,7 @@ Gas Gauge's neighbour. A band above the prompt that shows this week's Fable use.
 ## Privacy
 
 Everything stays on your machine: a count in the plugin's own store. Nothing is sent anywhere.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

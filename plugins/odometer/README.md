@@ -40,3 +40,7 @@ Nothing goes anywhere. Here is each thing, plainly.
 - `ui.render` for `AbovePrompt`: draws the dial above the prompt.
 
 Tested with Claude Code 2.1.287.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

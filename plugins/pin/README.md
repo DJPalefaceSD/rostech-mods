@@ -50,3 +50,7 @@ Nothing goes to any service from the mod itself. Here is each thing, plainly.
   line, above the prompt.
 
 Tested with Claude Code 2.1.287.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

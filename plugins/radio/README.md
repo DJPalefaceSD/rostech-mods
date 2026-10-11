@@ -58,3 +58,7 @@ Nothing goes anywhere. Here is each thing, plainly.
   the test, or says how it is set.
 
 Tested with Claude Code 2.1.287 on Windows.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

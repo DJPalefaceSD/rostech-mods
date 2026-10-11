@@ -47,3 +47,7 @@ Nothing goes to any service. Here is each thing, plainly.
   program, and says how many characters it copied.
 
 Tested with Claude Code 2.1.287 on Windows.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

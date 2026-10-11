@@ -48,3 +48,7 @@ Nothing goes anywhere. Here is each thing, plainly.
   your send-now key.
 
 MIT licensed. Made by Rostech.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

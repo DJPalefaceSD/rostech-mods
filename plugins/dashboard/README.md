@@ -80,3 +80,7 @@ requests. Here is each thing, plainly.
 The panel draws in the terminal and in the Code tab of the Claude desktop app.
 
 Tested with Claude Code 2.1.289.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

@@ -33,3 +33,7 @@ Nothing goes anywhere. Here is each thing, plainly.
 **What each hook does.**
 - `ui.render` for `Spinner`: swaps the busy word for one of yours. It
   changes only the word.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

@@ -22,3 +22,7 @@ If an older version left F5 in your file, or switched Ctrl+X Ctrl+S off, `/steer
 - Esc stays the stop button.
 
 MIT licensed. Made by Rostech.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

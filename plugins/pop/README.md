@@ -44,3 +44,7 @@ Nothing goes to any service from the mod itself. Here is each thing, plainly.
   opener, and says whether it opened.
 
 Tested with Claude Code 2.1.287 on Windows.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).

@@ -70,3 +70,7 @@ sh -c 'p="${TMPDIR:-/tmp}/shot-$(date +%Y%m%d-%H%M%S).png"; pngpaste "$p" 2>/dev
   prompt box with the message above.
 
 Tested with Claude Code 2.1.287 on Windows.
+
+## More mods
+
+See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).
