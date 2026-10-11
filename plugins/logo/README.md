@@ -30,4 +30,4 @@ Tested with Claude Code 2.1.288.
 
 ## More mods
 
-See every Rostech mod, live, at [liveculturegames.com/rostech](https://liveculturegames.com/rostech/).
+See every Rostech mod, live, at [rostech.io](https://rostech.io/).
