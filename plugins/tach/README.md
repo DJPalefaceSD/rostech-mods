@@ -50,4 +50,4 @@ Tested with Claude Code 2.1.287.
 
 ## More mods
 
-See every Rostech mod, live, at [rostech.io](https://rostech.io/).
+See every Rostech mod, live, at [rostech.app](https://rostech.app/).
