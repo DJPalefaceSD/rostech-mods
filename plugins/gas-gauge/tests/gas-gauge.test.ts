@@ -11,8 +11,8 @@ const reading = (fiveUsed: number, weekUsed: number) => ({
 
 test('/gas reads the tanks the engine measured', async ($, on) => {
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.status', async () => {})
-  on('ui.toast', async () => {})
+  on('ui.status', async () => ({ value: undefined }))
+  on('ui.toast', async () => ({ value: undefined }))
   await $.session.measure(reading(29, 72) as never)
   const answer = await $.command.run({ command: 'gas', args: '' })
   expect(answer.text).toContain('5-hour  E ███ ½ █░░ F  71% left')
@@ -27,8 +27,8 @@ test('/gas says so before the first reading', async $ => {
 test('/gas warns once when a tank drops past 25% left', async ($, on) => {
   const toasts: string[] = []
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.status', async () => {})
-  on('ui.toast', async (_, e) => { toasts.push(e.text) })
+  on('ui.status', async () => ({ value: undefined }))
+  on('ui.toast', async (_, e) => { toasts.push(e.text); return { value: undefined } })
   await $.session.measure(reading(70, 10) as never)
   await $.session.measure(reading(80, 10) as never)
   await $.session.measure(reading(85, 10) as never)
@@ -42,8 +42,8 @@ test('/gas hide keeps the numbers on the status line', async $ => {
 
 test('set to week, the 5-hour tank is gone from /gas', { options: { tanks: 'week' } }, async ($, on) => {
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.status', async () => {})
-  on('ui.toast', async () => {})
+  on('ui.status', async () => ({ value: undefined }))
+  on('ui.toast', async () => ({ value: undefined }))
   await $.session.measure(reading(29, 72) as never)
   const answer = await $.command.run({ command: 'gas', args: '' })
   expect(answer.text).toContain('week  E ██░ ½ ░░░ F  28% left')
@@ -53,8 +53,8 @@ test('set to week, the 5-hour tank is gone from /gas', { options: { tanks: 'week
 test('set to 5-hour, the week tank is gone and never warns', { options: { tanks: '5-hour' } }, async ($, on) => {
   const toasts: string[] = []
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.status', async () => {})
-  on('ui.toast', async (_, e) => { toasts.push(e.text) })
+  on('ui.status', async () => ({ value: undefined }))
+  on('ui.toast', async (_, e) => { toasts.push(e.text); return { value: undefined } })
   await $.session.measure(reading(10, 70) as never)
   await $.session.measure(reading(10, 80) as never)
   const answer = await $.command.run({ command: 'gas', args: '' })

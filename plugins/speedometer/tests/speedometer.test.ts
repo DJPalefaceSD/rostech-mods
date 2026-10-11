@@ -8,7 +8,7 @@ const reading = (percent: number) => ({
 
 test('/speed reads the fill the engine measured', async ($, on) => {
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.toast', async () => {})
+  on('ui.toast', async () => ({ value: undefined }))
   await $.session.measure(reading(50) as never)
   const answer = await $.command.run({ command: 'speed', args: '' })
   expect(answer.text).toContain('0 ███ ½ ░░░ MAX  context 50% full')
@@ -17,7 +17,7 @@ test('/speed reads the fill the engine measured', async ($, on) => {
 test('/speed warns once when the context redlines', async ($, on) => {
   const toasts: string[] = []
   on('session.measure', (_, e) => ({ changed: e.changed }))
-  on('ui.toast', async (_, e) => { toasts.push(e.text) })
+  on('ui.toast', async (_, e) => { toasts.push(e.text); return { value: undefined } })
   await $.session.measure(reading(70) as never)
   await $.session.measure(reading(88) as never)
   await $.session.measure(reading(92) as never)
