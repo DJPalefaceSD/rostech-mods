@@ -1,0 +1,17 @@
+{
+  "name": "rostech-key-fob",
+  "displayName": "Key Fob",
+  "version": "0.1.0",
+  "description": "Three one-word keywords: CLIP puts a value on your clipboard, POP opens a result in a new browser window, and RESTATE makes Claude say the last thing again, shorter. Skills only: no hooks, no scripts, nothing sent anywhere.",
+  "author": {
+    "name": "Rostech"
+  },
+  "license": "MIT",
+  "homepage": "https://github.com/DJPalefaceSD/rostech-mods/tree/main/plugins/key-fob",
+  "repository": "https://github.com/DJPalefaceSD/rostech-mods",
+  "icon": "./icon.png",
+  "documentationUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/plugins/key-fob/README.md",
+  "supportUrl": "https://github.com/DJPalefaceSD/rostech-mods/issues",
+  "privacyPolicyUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/PRIVACY.md",
+  "termsOfServiceUrl": "https://github.com/DJPalefaceSD/rostech-mods/blob/main/TERMS.md"
+}

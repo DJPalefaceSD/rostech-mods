@@ -89,6 +89,11 @@
       "name": "rostech-dashboard",
       "source": "./plugins/dashboard",
       "description": "A Dashboard button above the prompt that opens a panel you fill yourself: effort, helper model, launch buttons and a status row. Fully customisable."
+    },
+    {
+      "name": "rostech-key-fob",
+      "source": "./plugins/key-fob",
+      "description": "Three one-word keywords: CLIP puts a value on your clipboard, POP opens a result in a new browser window, RESTATE says the last thing again, shorter."
     }
   ]
 }
